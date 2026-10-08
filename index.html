@@ -708,10 +708,10 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Klasifikasi Impak *</label>
-                        <select id="taskFormType" required class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500">
-                            <option value="Major">Major (Komitmen Tinggi / Statutori - 3 Pts)</option>
-                            <option value="Minor">Minor (Rutin / Sokongan - 1 Pt)</option>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Klasifikasi Impak (Major / Minor) *</label>
+                        <select id="taskFormType" required class="w-full px-3 py-2 border border-teal-300 rounded-xl text-xs bg-teal-50/50 font-bold text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500">
+                            <option value="Major" class="font-bold text-rose-700">⭐ Major (Komitmen Tinggi / Mesyuarat / Statutori)</option>
+                            <option value="Minor" class="font-medium text-teal-800">🔹 Minor (Rutin / Pentadbiran / Sokongan)</option>
                         </select>
                     </div>
 
@@ -987,18 +987,18 @@
             { id: 17, name: "Combined Clinic", type: "Major", domain: "clinical", domainLabel: "Klinikal & Prosedur", specialists: ["Dr Missdalia", "Dr Surekha"], mo: "All MO" },
             { id: 18, name: "General Clinic", type: "Major", domain: "clinical", domainLabel: "Klinikal & Prosedur", specialists: ["Dr Missdalia", "Dr Zulaikha"], mo: "All MO" },
             { id: 19, name: "Infertility", type: "Minor", domain: "clinical", domainLabel: "Klinikal & Prosedur", specialists: ["Dr Surekha", "Dr Zulaikha"], mo: "Dr Asma / Dr Jasrine / Dr Koghi" },
-            { id: 20, name: "PPC / Postnatal / Family Planning", type: "Minor", domain: "clinical", domainLabel: "Klinikal & Prosedur", specialists: ["Dr Hani", "Dr Simran", "Dr Anita", "Dr Nur Aini"], mo: "Dr Natrah / Dr Aini / Dr Jasrine / Dr Hazimah / Dr Faizal / Dr Amir" },
+            { id: 20, name: "PPC / Postnatal / Family Planning", type: "Major", domain: "clinical", domainLabel: "Klinikal & Prosedur", specialists: ["Dr Hani", "Dr Simran", "Dr Anita", "Dr Nur Aini"], mo: "Dr Natrah / Dr Aini / Dr Jasrine / Dr Hazimah / Dr Faizal / Dr Amir" },
             { id: 21, name: "PPIUCD (Postpartum IUCD)", type: "Minor", domain: "clinical", domainLabel: "Klinikal & Prosedur", specialists: ["Dr Amilin", "Dr Hani"], mo: "Dr Helmi / Dr Aini / Dr Victoria, Dr Pugan" },
             { id: 22, name: "OT (Operation Theatre Management)", type: "Major", domain: "clinical", domainLabel: "Klinikal & Prosedur", specialists: ["Dr Norliza", "Dr Linda"], mo: "Dr Sofea / Dr Yuan / Dr Ummi A" },
             { id: 23, name: "MO Affairs (Medical Officer Affairs)", type: "Major", domain: "training", domainLabel: "Latihan & Akademik", specialists: ["Dr Missdalia", "Dr Simran"], mo: "Dr Asma / Dr Ummi, Dr Aini / Dr Beckie, Dr Jasrine" },
             { id: 24, name: "CME MO", type: "Minor", domain: "training", domainLabel: "Latihan & Akademik", specialists: ["Dr Aida"], mo: "Dr Asma / Dr Beckie / Dr Sunil" },
             { id: 25, name: "Patient Safety Goals (MPSG)", type: "Major", domain: "quality", domainLabel: "Kualiti & Audit", specialists: ["Dr Aida", "Dr Nur Aini"], mo: "Dr Hamizah / Dr Aisyah / Dr Faizal, Sister" },
-            { id: 26, name: "Data / SOP Keeper / Minutes Meeting", type: "Minor", domain: "admin", domainLabel: "Pentadbiran & Khidmat", specialists: ["Dr Aida", "Dr Nur Aini"], mo: "Dr Jasrine / Dr Natrah / Dr Aini / Dr Yuan / Dr Syazwani / Dr Ummi A" },
+            { id: 26, name: "Data / SOP Keeper / Minutes Meeting", type: "Major", domain: "admin", domainLabel: "Pentadbiran & Khidmat", specialists: ["Dr Aida", "Dr Nur Aini"], mo: "Dr Jasrine / Dr Natrah / Dr Aini / Dr Yuan / Dr Syazwani / Dr Ummi A" },
             { id: 27, name: "Infection Control, OSHA, NSI, TB", type: "Major", domain: "quality", domainLabel: "Kualiti & Audit", specialists: ["Dr Zulaikha", "Dr Hani"], mo: "Dr Jasrine / Dr Gopi / Dr Syazwani / Dr Koghi, Sister" },
-            { id: 28, name: "Pain Free Hospital", type: "Minor", domain: "clinical", domainLabel: "Klinikal & Prosedur", specialists: ["Dr Norliza", "Dr Liyana"], mo: "Dr Natrah / Dr Hazimah, Dr Ummi / Dr Sofea, Sr Kamalam / Norzila" },
+            { id: 28, name: "Pain Free Hospital", type: "Major", domain: "clinical", domainLabel: "Klinikal & Prosedur", specialists: ["Dr Norliza", "Dr Liyana"], mo: "Dr Natrah / Dr Hazimah, Dr Ummi / Dr Sofea, Sr Kamalam / Norzila" },
             { id: 29, name: "Parallel Pathway", type: "Major", domain: "training", domainLabel: "Latihan & Akademik", specialists: ["Dr Surekha", "Dr Simran", "Dr Liyana"], mo: "Dr Asma / Dr Natrah / Dr Pugan / Dr Beckie / Dr Aini / Dr Koghi / Dr Faizal" },
             { id: 30, name: "Breastfeeding (BFHI)", type: "Major", domain: "quality", domainLabel: "Kualiti & Audit", specialists: ["Dr Missdalia", "Dr Norliza", "Dr Simran"], mo: "Dr Asma / Dr Jasrine / Dr Beckie / Dr Aisyah / Dr Victoria / Dr Sunil, Sr Noraini" },
-            { id: 31, name: "Department Courses", type: "Minor", domain: "training", domainLabel: "Latihan & Akademik", specialists: ["Dr Missdalia", "Dr Aida"], mo: "Dr Natrah / Dr Jasrine and all MOs, Sister" },
+            { id: 31, name: "Department Courses", type: "Major", domain: "training", domainLabel: "Latihan & Akademik", specialists: ["Dr Missdalia", "Dr Aida"], mo: "Dr Natrah / Dr Jasrine and all MOs, Sister" },
             { id: 32, name: "Risk Management", type: "Major", domain: "quality", domainLabel: "Kualiti & Audit", specialists: ["Dr Anita", "Dr Surekha"], mo: "Dr Sunil / Dr Amir / Dr Munirah, Sister" },
             { id: 33, name: "Pharmacy / Ubat", type: "Minor", domain: "admin", domainLabel: "Pentadbiran & Khidmat", specialists: ["Dr Missdalia", "Dr Surekha"], mo: "Dr Jasrine / Dr Pugan / Dr Balqis, Sister" },
             { id: 34, name: "Day Care Unit", type: "Minor", domain: "clinical", domainLabel: "Klinikal & Prosedur", specialists: ["Dr Norliza", "Dr Nur Aini"], mo: "Dr Faizal / Dr Syazwani / Dr Vaithes, MA" },
@@ -1018,8 +1018,8 @@
             { id: 48, name: "Hospital Mesra Ibadah", type: "Minor", domain: "admin", domainLabel: "Pentadbiran & Khidmat", specialists: ["Dr Liyana", "Dr Nur Aini"], mo: "Dr Asma / Dr Aini / Dr Hazimah / Dr Balqis, Matron/Sister" },
             { id: 49, name: "Protocol, Policy, Consent & Leaflet", type: "Major", domain: "governance", domainLabel: "Governan & Polisi", specialists: ["Dr Anita", "Dr Norliza", "Dr Liyana", "Dr Surekha", "Dr Nur Aini"], mo: "Dr Aisyah, Dr Vaithes, Dr Natrah, Dr Sunil" },
             { id: 50, name: "Suicide Risk Screening Protocol", type: "Minor", domain: "governance", domainLabel: "Governan & Polisi", specialists: ["Dr Surekha"], mo: "Dr Hamizah / Dr Koghi / Dr Nisa, Sister" },
-            { id: 51, name: "Pre Op Discussion", type: "Minor", domain: "clinical", domainLabel: "Klinikal & Prosedur", specialists: ["Dr Linda", "Dr Aida"], mo: "Dr Yuan / Dr Sofea / Dr Ummi A, Dr Asma Z" },
-            { id: 52, name: "Monthly Census", type: "Minor", domain: "admin", domainLabel: "Pentadbiran & Khidmat", specialists: ["Dr Zulaikha", "Dr Nur Aini"], mo: "Dr Jasrine / Dr Aisyah / Dr Chong / Dr Helmi" },
+            { id: 51, name: "Pre Op Discussion", type: "Major", domain: "clinical", domainLabel: "Klinikal & Prosedur", specialists: ["Dr Linda", "Dr Aida"], mo: "Dr Yuan / Dr Sofea / Dr Ummi A, Dr Asma Z" },
+            { id: 52, name: "Monthly Census", type: "Major", domain: "admin", domainLabel: "Pentadbiran & Khidmat", specialists: ["Dr Zulaikha", "Dr Nur Aini"], mo: "Dr Jasrine / Dr Aisyah / Dr Chong / Dr Helmi" },
             { id: 53, name: "Annual Report", type: "Major", domain: "admin", domainLabel: "Pentadbiran & Khidmat", specialists: ["Dr Missdalia", "Dr Zulaikha"], mo: "Dr Jasrine / Dr Hazimah / Dr Yuan / Dr Gopi, MA Fuad/Aina, Sisters" },
             { id: 54, name: "SISPA (Public Complaints)", type: "Major", domain: "governance", domainLabel: "Governan & Polisi", specialists: ["Dr Anita", "Dr Linda"], mo: "Dr Asma / Dr Yuan / Dr Faizal, Dr Syazwani, Sister" },
             { id: 55, name: "Near Miss Reporting", type: "Major", domain: "quality", domainLabel: "Kualiti & Audit", specialists: ["Dr Norliza"], mo: "MO, Sister" },
@@ -1045,13 +1045,58 @@
             { id: 75, name: "Masters Trainees", type: "Major", domain: "training", domainLabel: "Latihan & Akademik", specialists: ["Dr Zulaikha"], mo: "All Masters Trainees" },
             { id: 76, name: "Department Policy Formulation", type: "Major", domain: "governance", domainLabel: "Governan & Polisi", specialists: ["Dr Linda", "Dr Missdalia", "Dr Zulaikha", "Dr Surekha", "Dr Liyana", "Dr Anita", "Dr Aida", "Dr Simran", "Dr Norliza", "Dr Nur Aini", "Dr Amilin", "Dr Hani", "Dr Hajar"], mo: "Sub-lead Specialists across all units" },
             { id: 77, name: "OT Book (Elective Scheduling & Vetting)", type: "Major", domain: "clinical", domainLabel: "Klinikal & Prosedur", specialists: ["Dr Hajar", "Dr Norliza"], mo: "Dr Sofea / Dr Yuan, OT Sisters" },
-            { id: 78, name: "AI Projects & Digital Health Innovation", type: "Major", domain: "quality", domainLabel: "Kualiti & Audit", specialists: ["Dr Hajar"], mo: "Dr Jasrine / Dr Helmi, Digital & IT Liaison" }
+            { id: 78, name: "AI Projects & Digital Health Innovation", type: "Major", domain: "quality", domainLabel: "Kualiti & Audit", specialists: ["Dr Hajar"], mo: "Dr Jasrine / Dr Helmi, Digital & IT Liaison" },
+            { id: 79, name: "Antenatal Classes (Kelas Antenatal)", type: "Minor", domain: "clinical", domainLabel: "Klinikal & Prosedur", specialists: ["Dr Hani", "Dr Norliza"], mo: "Sister / JM O&G Wards" }
         ];
+
+        // Automatic synchronization helper for requested Major/Minor classifications
+        function applyTaskClassificationUpdates(tasks) {
+            if (!Array.isArray(tasks)) return tasks;
+            const majorKeywords = [
+                'department course',
+                'pain free',
+                'data / sop',
+                'sop keeper',
+                'minutes meeting',
+                'ppc',
+                'postnatal / family planning',
+                'monthly census',
+                'pre op'
+            ];
+
+            let hasAntenatal = false;
+            tasks.forEach(t => {
+                const lower = (t.name || '').toLowerCase();
+                if (majorKeywords.some(kw => lower.includes(kw))) {
+                    t.type = "Major";
+                }
+                if (lower.includes('antenatal')) {
+                    t.type = "Minor";
+                    hasAntenatal = true;
+                }
+            });
+
+            if (!hasAntenatal) {
+                const nextId = tasks.length > 0 ? Math.max(...tasks.map(x => x.id)) + 1 : 79;
+                tasks.push({
+                    id: nextId,
+                    name: "Antenatal Classes (Kelas Antenatal)",
+                    type: "Minor",
+                    domain: "clinical",
+                    domainLabel: "Klinikal & Prosedur",
+                    leads: ["Dr Hani"],
+                    specialists: ["Dr Hani", "Dr Norliza"],
+                    mo: "Sister / JM O&G Wards"
+                });
+            }
+            return tasks;
+        }
 
         let tasksData = [];
         try {
             const saved = localStorage.getItem('htpn_og_tasks_v2');
             tasksData = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultTasksData));
+            tasksData = applyTaskClassificationUpdates(tasksData);
         } catch (e) {
             tasksData = JSON.parse(JSON.stringify(defaultTasksData));
         }
@@ -1103,7 +1148,7 @@
 
         window.updateAppTasksFromCloud = function(cloudTasks) {
             if (!cloudTasks || !Array.isArray(cloudTasks) || cloudTasks.length === 0) return;
-            tasksData = cloudTasks;
+            tasksData = applyTaskClassificationUpdates(cloudTasks);
             try { localStorage.setItem('htpn_og_tasks_v2', JSON.stringify(tasksData)); } catch (e) {}
 
             refreshSpecialistsList();
@@ -2131,6 +2176,7 @@
             document.getElementById('taskFormSubmitBtnText').textContent = "Simpan Tugasan";
             document.getElementById('taskFormId').value = "";
             document.getElementById('taskFormName').value = "";
+            // Default to Major or allow user choice easily
             document.getElementById('taskFormType').value = "Major";
             document.getElementById('taskFormDomain').value = "clinical";
             document.getElementById('taskFormMO').value = "";
