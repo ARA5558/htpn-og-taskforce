@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTPN O&G Specialist Workload & Quality Governance Dashboard</title>
+    <title>HTPN O&G - Semak In-Charge & Beban Pakar</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Font Awesome CDN -->
+    <!-- Font Awesome 6 CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- PDF.js CDN for reading PDF documents -->
+    <!-- PDF.js CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <!-- Mammoth.js CDN for reading Word (.docx) documents -->
+    <!-- Mammoth.js CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
     <script>
         if (window.pdfjsLib) {
@@ -39,129 +39,178 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
 
-    <!-- Top Header -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-600 to-indigo-600 flex items-center justify-center text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 gap-2">
+                <!-- Branding -->
+                <div class="flex items-center space-x-2.5 min-w-0">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-600 to-indigo-600 flex items-center justify-center text-white shadow-md shrink-0">
                         <i class="fa-solid fa-hospital-user text-lg"></i>
                     </div>
-                    <div>
-                        <h1 class="font-bold text-lg text-slate-900 leading-tight">HTPN O&G Department</h1>
-                        <p class="text-xs text-slate-500 font-medium">Specialist Portfolio Workload & Quality Governance Analytics (Live Cloud)</p>
+                    <div class="truncate">
+                        <div class="flex items-center space-x-2">
+                            <h1 class="font-bold text-base sm:text-lg text-slate-900 leading-tight truncate">HTPN O&G</h1>
+                            <span id="cloudSyncBadge" class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-semibold bg-emerald-100 text-emerald-800 shrink-0">
+                                <i id="cloudSyncIcon" class="fa-solid fa-cloud mr-1 text-emerald-600"></i>
+                                <span id="cloudSyncText">Awan Live</span>
+                            </span>
+                        </div>
+                        <p class="text-[11px] sm:text-xs text-slate-500 font-medium truncate">Direktori In-Charge & Beban Kerja Pakar</p>
                     </div>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <span id="cloudSyncBadge" class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 transition-all">
-                        <i id="cloudSyncIcon" class="fa-solid fa-arrows-rotate fa-spin mr-1.5 text-amber-600"></i>
-                        <span id="cloudSyncText">Menyambung ke Awan...</span>
-                    </span>
-                    <button onclick="openRosterModal()" class="inline-flex items-center px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm transition">
-                        <i class="fa-solid fa-users-gear mr-1.5"></i> Urus Warga (Pakar & MO)
+
+                <!-- Action Buttons -->
+                <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
+                    <button onclick="openRosterModal()" title="Urus Warga" class="inline-flex items-center px-2.5 sm:px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm transition">
+                        <i class="fa-solid fa-users-gear sm:mr-1.5"></i>
+                        <span class="hidden sm:inline">Urus Warga</span>
                     </button>
-                    <button onclick="openUploadModal()" class="inline-flex items-center px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold rounded-lg shadow-sm transition">
-                        <i class="fa-solid fa-cloud-arrow-up mr-1.5"></i> Muat Naik PDF / Word
+                    <button onclick="openUploadModal()" title="Muat Naik Fail" class="inline-flex items-center px-2.5 sm:px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold rounded-lg shadow-sm transition">
+                        <i class="fa-solid fa-cloud-arrow-up sm:mr-1.5"></i>
+                        <span class="hidden sm:inline">Muat Naik</span>
                     </button>
-                    <button onclick="resetToDefaultData()" title="Kembalikan data asal Julai 2026" class="hidden sm:inline-flex items-center px-2.5 py-1.5 border border-slate-300 text-xs font-medium rounded-lg text-slate-600 bg-white hover:bg-slate-50 transition">
+                    <button onclick="resetToDefaultData()" title="Kembalikan data asal Julai 2026" class="hidden md:inline-flex items-center px-2.5 py-1.5 border border-slate-300 text-xs font-medium rounded-lg text-slate-600 bg-white hover:bg-slate-50 transition">
                         <i class="fa-solid fa-arrow-rotate-left mr-1 text-slate-400"></i> Reset
                     </button>
-                    <button onclick="window.print()" class="hidden sm:inline-flex items-center px-3 py-1.5 border border-slate-300 text-xs font-medium rounded-lg text-slate-700 bg-white hover:bg-slate-50 shadow-sm transition">
-                        <i class="fa-solid fa-print mr-1.5 text-slate-500"></i> Cetak
-                    </button>
                 </div>
-            </div>
-            <div id="cloudUserBar" class="hidden pb-1 -mt-1 text-[11px] text-slate-400 flex items-center justify-between border-t border-slate-100 pt-1">
-                <span class="flex items-center space-x-1.5">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-                    <span class="text-emerald-700 font-medium">Pangkalan Data Awan Terhubung: <strong class="font-mono">htpn-og-taskforce</strong></span>
-                </span>
-                <span class="font-mono text-[10px] text-slate-400">Sesi Sedia Ada: <span id="currentUserIdDisplay" class="font-semibold text-slate-600">...</span></span>
             </div>
         </div>
     </header>
 
-    <!-- Navigation Bar -->
     <nav class="bg-white border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex space-x-1 sm:space-x-8 overflow-x-auto custom-scrollbar py-2 text-sm font-medium">
-                <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn active text-teal-600 border-b-2 border-teal-600 px-3 py-2 whitespace-nowrap flex items-center space-x-2 font-semibold">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex space-x-2 sm:space-x-6 overflow-x-auto custom-scrollbar py-2 text-xs sm:text-sm font-medium">
+                <!-- Tab 1: Semak In-Charge (PANTAS) -->
+                <button onclick="switchTab('lookup')" id="tab-lookup" class="tab-btn active text-teal-600 border-b-2 border-teal-600 px-3 py-2 whitespace-nowrap flex items-center space-x-1.5 font-bold">
+                    <i class="fa-solid fa-bolt text-amber-500"></i>
+                    <span>Semak In-Charge (Pantas)</span>
+                </button>
+                <!-- Tab 2: Overview & Charts -->
+                <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn text-slate-500 hover:text-slate-700 border-b-2 border-transparent px-3 py-2 whitespace-nowrap flex items-center space-x-1.5">
                     <i class="fa-solid fa-chart-pie"></i>
-                    <span>Ringkasan Beban & Analisis</span>
+                    <span>Analisis Beban Kerja</span>
                 </button>
-                <button onclick="switchTab('specialists')" id="tab-specialists" class="tab-btn text-slate-500 hover:text-slate-700 border-b-2 border-transparent px-3 py-2 whitespace-nowrap flex items-center space-x-2">
+                <!-- Tab 3: Specialists Breakdown -->
+                <button onclick="switchTab('specialists')" id="tab-specialists" class="tab-btn text-slate-500 hover:text-slate-700 border-b-2 border-transparent px-3 py-2 whitespace-nowrap flex items-center space-x-1.5">
                     <i class="fa-solid fa-user-doctor"></i>
-                    <span>Analisis Individu Pakar (<span id="navSpecialistCount">13</span>)</span>
+                    <span>Profil Pakar (<span id="navSpecialistCount">13</span>)</span>
                 </button>
-                <button onclick="switchTab('quality')" id="tab-quality" class="tab-btn text-slate-500 hover:text-slate-700 border-b-2 border-transparent px-3 py-2 whitespace-nowrap flex items-center space-x-2">
+                <!-- Tab 4: Quality & MSQH -->
+                <button onclick="switchTab('quality')" id="tab-quality" class="tab-btn text-slate-500 hover:text-slate-700 border-b-2 border-transparent px-3 py-2 whitespace-nowrap flex items-center space-x-1.5">
                     <i class="fa-solid fa-award"></i>
-                    <span class="relative">
-                        Fokus Kualiti & MSQH
-                        <span class="inline-block w-2 h-2 bg-rose-500 rounded-full ml-1"></span>
-                    </span>
+                    <span>Kualiti & MSQH</span>
                 </button>
-                <button onclick="switchTab('matrix')" id="tab-matrix" class="tab-btn text-slate-500 hover:text-slate-700 border-b-2 border-transparent px-3 py-2 whitespace-nowrap flex items-center space-x-2">
+                <!-- Tab 5: Master Matrix Table -->
+                <button onclick="switchTab('matrix')" id="tab-matrix" class="tab-btn text-slate-500 hover:text-slate-700 border-b-2 border-transparent px-3 py-2 whitespace-nowrap flex items-center space-x-1.5">
                     <i class="fa-solid fa-table-list"></i>
-                    <span>Matriks Tugasan (Major vs Minor)</span>
+                    <span>Jadual Matriks Penuh</span>
                 </button>
-                <button onclick="switchTab('hod-strategy')" id="tab-hod-strategy" class="tab-btn text-slate-500 hover:text-slate-700 border-b-2 border-transparent px-3 py-2 whitespace-nowrap flex items-center space-x-2">
-                    <i class="fa-solid fa-compass-drafting"></i>
-                    <span>Cadangan HOD & Rebalancing</span>
+                <!-- Tab 6: HOD Strategy -->
+                <button onclick="switchTab('hod-strategy')" id="tab-hod-strategy" class="tab-btn text-slate-500 hover:text-slate-700 border-b-2 border-transparent px-3 py-2 whitespace-nowrap flex items-center space-x-1.5">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                    <span>Pelan Imbangan HOD</span>
                 </button>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content Container -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <!-- Tab 1: Executive Overview -->
-        <section id="content-overview" class="tab-content space-y-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+    <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
+
+        <!-- SECTION 1: SEMAK IN-CHARGE (PANTAS) -->
+        <section id="content-lookup" class="tab-content space-y-4">
+            <!-- Search & Quick Chips Header -->
+            <div class="bg-gradient-to-r from-teal-700 via-indigo-800 to-slate-900 rounded-2xl p-4 sm:p-6 text-white shadow-md space-y-3">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
                     <div>
-                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Jumlah Portfolio / Tugas</p>
-                        <h3 id="statTotalTasks" class="text-3xl font-extrabold text-slate-900 mt-1">78 <span class="text-xs font-normal text-slate-500">Item</span></h3>
-                        <p id="statMajorMinor" class="text-xs text-slate-500 mt-1"><span class="text-teal-600 font-semibold">37 Major</span> • 41 Minor</p>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-white/20 text-teal-100">
+                            <i class="fa-solid fa-stethoscope mr-1"></i> Rujukan Pantas Wad & Dewan Bersalin
+                        </span>
+                        <h2 class="text-xl sm:text-2xl font-black mt-1">Cari Doktor & MO In-Charge</h2>
+                        <p class="text-xs text-slate-200">Taip nama tugas, kod kecemasan, atau nama doktor untuk terus ketahui siapa bertanggungjawab.</p>
                     </div>
-                    <div class="w-12 h-12 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-xl">
+                    <span id="quickLookupResultCount" class="text-xs font-bold px-3 py-1 rounded-full bg-white/10 border border-white/20 self-start sm:self-auto">
+                        78 Portfolio Sedia Ada
+                    </span>
+                </div>
+
+                <!-- Instant Search Input -->
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
+                    <input type="text" id="quickLookupInput" onkeyup="renderQuickLookupCards(this.value)" placeholder="Taip nama tugas (cth: Code Red, OT Book, MFM, C&P, Dr Anita, Dr Hajar)..." class="w-full pl-10 pr-10 py-3 rounded-xl text-sm bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-teal-400 shadow-inner">
+                    <button onclick="clearQuickLookupSearch()" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600 text-xs p-1">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Quick Filter Chips -->
+                <div class="flex items-center space-x-1.5 overflow-x-auto custom-scrollbar pt-1 text-xs">
+                    <span class="text-[11px] font-semibold text-teal-200 shrink-0">Pintasan Wad:</span>
+                    <button onclick="setQuickLookupFilter('Code Red')" class="px-2.5 py-1 rounded-lg bg-rose-500/80 hover:bg-rose-500 text-white font-bold whitespace-nowrap transition">🚨 Code Red</button>
+                    <button onclick="setQuickLookupFilter('OT Book')" class="px-2.5 py-1 rounded-lg bg-indigo-500/80 hover:bg-indigo-500 text-white font-bold whitespace-nowrap transition">📋 OT Book</button>
+                    <button onclick="setQuickLookupFilter('MFM')" class="px-2.5 py-1 rounded-lg bg-teal-500/80 hover:bg-teal-500 text-white font-bold whitespace-nowrap transition">👶 MFM Clinic</button>
+                    <button onclick="setQuickLookupFilter('MSQH')" class="px-2.5 py-1 rounded-lg bg-amber-500/80 hover:bg-amber-500 text-white font-bold whitespace-nowrap transition">🏆 MSQH</button>
+                    <button onclick="setQuickLookupFilter('RCA')" class="px-2.5 py-1 rounded-lg bg-purple-500/80 hover:bg-purple-500 text-white font-bold whitespace-nowrap transition">🔍 RCA</button>
+                    <button onclick="setQuickLookupFilter('Resuscitation')" class="px-2.5 py-1 rounded-lg bg-emerald-500/80 hover:bg-emerald-500 text-white font-bold whitespace-nowrap transition">⚡ Resuscitation</button>
+                    <button onclick="setQuickLookupFilter('Casemix')" class="px-2.5 py-1 rounded-lg bg-blue-500/80 hover:bg-blue-500 text-white font-bold whitespace-nowrap transition">📊 Casemix</button>
+                    <button onclick="setQuickLookupFilter('SISPA')" class="px-2.5 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-bold whitespace-nowrap transition">📝 SISPA</button>
+                    <button onclick="setQuickLookupFilter('')" class="px-2.5 py-1 rounded-lg bg-white/20 hover:bg-white/30 text-white font-medium whitespace-nowrap transition">Semua</button>
+                </div>
+            </div>
+
+            <!-- Dynamic In-Charge Card Grid -->
+            <div id="quickLookupGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
+                <!-- Dynamically rendered via JS -->
+            </div>
+        </section>
+
+        <section id="content-overview" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-500">Jumlah Portfolio</p>
+                        <h3 id="statTotalTasks" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">78</h3>
+                        <p id="statMajorMinor" class="text-[11px] sm:text-xs text-slate-500 mt-0.5"><span class="text-teal-600 font-semibold">39 Major</span> • 39 Minor</p>
+                    </div>
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-lg sm:text-xl shrink-0">
                         <i class="fa-solid fa-list-check"></i>
                     </div>
                 </div>
 
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Pakar Klinikal (Specialist)</p>
-                        <h3 id="statSpecialistCount" class="text-3xl font-extrabold text-slate-900 mt-1">13 <span class="text-xs font-normal text-slate-500">Orang</span></h3>
-                        <p class="text-xs text-emerald-600 font-semibold mt-1"><i class="fa-solid fa-users mr-1"></i> Termasuk Dr Hajar & Pasukan</p>
+                        <p class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-500">Pakar Klinikal</p>
+                        <h3 id="statSpecialistCount" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">13</h3>
+                        <p class="text-[11px] sm:text-xs text-emerald-600 font-semibold mt-0.5"><i class="fa-solid fa-users mr-1"></i>Termasuk Dr Hajar</p>
                     </div>
-                    <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg sm:text-xl shrink-0">
                         <i class="fa-solid fa-stethoscope"></i>
                     </div>
                 </div>
 
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Purata Beban Seimbang</p>
-                        <h3 id="statAvgLoad" class="text-3xl font-extrabold text-slate-900 mt-1">14.1 <span class="text-xs font-normal text-slate-500">Tugas / Pakar</span></h3>
-                        <p class="text-xs text-slate-500 mt-1">Status: <span class="font-bold text-teal-700">Terselaras di Awan</span></p>
+                        <p class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-500">Purata Beban</p>
+                        <h3 id="statAvgLoad" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">14.1</h3>
+                        <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5">Tugas / Pakar</p>
                     </div>
-                    <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg sm:text-xl shrink-0">
                         <i class="fa-solid fa-scale-balanced"></i>
                     </div>
                 </div>
 
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Portfolio Kualiti & Keselamatan</p>
-                        <h3 id="statQualityTasks" class="text-3xl font-extrabold text-rose-600 mt-1">19 <span class="text-xs font-normal text-slate-500">Item Kritikal</span></h3>
-                        <p class="text-xs text-slate-500 mt-1">MSQH, QA/KPI, RCA, M&M, Audit, AI</p>
+                        <p class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-500">Kualiti & Keselamatan</p>
+                        <h3 id="statQualityTasks" class="text-2xl sm:text-3xl font-extrabold text-rose-600 mt-1">19</h3>
+                        <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5">MSQH, QA, RCA, M&M</p>
                     </div>
-                    <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-lg sm:text-xl shrink-0">
                         <i class="fa-solid fa-shield-heart"></i>
                     </div>
                 </div>
             </div>
-            <!-- Executive Alert Banner -->
+
+            <!-- Warning Banner -->
             <div class="bg-gradient-to-r from-amber-50 via-rose-50 to-orange-50 border-l-4 border-amber-500 p-4 rounded-xl text-slate-800 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
                 <div class="flex items-start space-x-3">
                     <i class="fa-solid fa-triangle-exclamation text-amber-600 text-xl mt-0.5"></i>
@@ -177,15 +226,14 @@
                 </button>
             </div>
 
-            <!-- Charts Grid -->
+            <!-- Charts -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
                     <div class="flex justify-between items-center mb-4">
                         <div>
                             <h3 class="font-bold text-slate-900 text-base">Skor Indeks Beban Kerja Pakar (Weighted Load)</h3>
-                            <p class="text-xs text-slate-500">Major = 3 mata | Minor = 1 mata (Diperbaharui Masa Nyata)</p>
+                            <p class="text-xs text-slate-500">👑 Lead Major (4 pt) • 👥 Sokongan Major (2 pt) • 👑 Lead Minor (2 pt) • 👥 Sokongan Minor (1 pt)</p>
                         </div>
-                        <span class="px-2.5 py-1 bg-slate-100 text-slate-700 text-xs rounded-lg font-medium">Beban Sebenar</span>
                     </div>
                     <div class="relative flex-1 min-h-[300px]">
                         <canvas id="workloadChart"></canvas>
@@ -195,12 +243,8 @@
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
                     <div class="flex justify-between items-center mb-4">
                         <div>
-                            <h3 class="font-bold text-slate-900 text-base">Komposisi Tugasan: Major vs Minor</h3>
-                            <p class="text-xs text-slate-500">Pecahan bilangan tugasan berimpak tinggi vs tugas sokongan</p>
-                        </div>
-                        <div class="flex items-center space-x-2 text-xs">
-                            <span class="inline-flex items-center"><span class="w-3 h-3 bg-rose-500 rounded mr-1"></span> Major</span>
-                            <span class="inline-flex items-center"><span class="w-3 h-3 bg-teal-400 rounded mr-1"></span> Minor</span>
+                            <h3 class="font-bold text-slate-900 text-base">Komposisi Peranan: Ketua (PIC) vs Sokongan</h3>
+                            <p class="text-xs text-slate-500">Pecahan tugasan di mana pakar menjadi Main Person mesyuarat vs AJK sokongan</p>
                         </div>
                     </div>
                     <div class="relative flex-1 min-h-[300px]">
@@ -208,55 +252,8 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
-                    <div>
-                        <h3 class="font-bold text-slate-900 text-base">6 Teras Portfolio Jabatan O&G</h3>
-                        <p class="text-xs text-slate-500">Taburan skop tanggungjawab jabatan mengikut domain fungsi</p>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                    <div class="p-3 rounded-xl bg-rose-50 border border-rose-100 text-center">
-                        <i class="fa-solid fa-award text-rose-600 text-lg mb-1"></i>
-                        <h4 class="text-xs font-bold text-slate-800">Kualiti & Audit</h4>
-                        <p id="domainCountQuality" class="text-lg font-extrabold text-rose-600">19 <span class="text-xs font-normal">tugas</span></p>
-                        <p class="text-[10px] text-slate-500">MSQH, QA, RCA, AI</p>
-                    </div>
-                    <div class="p-3 rounded-xl bg-blue-50 border border-blue-100 text-center">
-                        <i class="fa-solid fa-stethoscope text-blue-600 text-lg mb-1"></i>
-                        <h4 class="text-xs font-bold text-slate-800">Klinikal & Prosedur</h4>
-                        <p id="domainCountClinical" class="text-lg font-extrabold text-blue-600">15 <span class="text-xs font-normal">tugas</span></p>
-                        <p class="text-[10px] text-slate-500">OT, MFM, Klinik, Daycare</p>
-                    </div>
-                    <div class="p-3 rounded-xl bg-purple-50 border border-purple-100 text-center">
-                        <i class="fa-solid fa-graduation-cap text-purple-600 text-lg mb-1"></i>
-                        <h4 class="text-xs font-bold text-slate-800">Latihan & Akademik</h4>
-                        <p id="domainCountTraining" class="text-lg font-extrabold text-purple-600">11 <span class="text-xs font-normal">tugas</span></p>
-                        <p class="text-[10px] text-slate-500">Parallel, Masters, MO/HO</p>
-                    </div>
-                    <div class="p-3 rounded-xl bg-amber-50 border border-amber-100 text-center">
-                        <i class="fa-solid fa-bell text-amber-600 text-lg mb-1"></i>
-                        <h4 class="text-xs font-bold text-slate-800">Kecemasan / Kod</h4>
-                        <p id="domainCountEmergency" class="text-lg font-extrabold text-amber-600">9 <span class="text-xs font-normal">tugas</span></p>
-                        <p class="text-[10px] text-slate-500">Red, Blue, Amber, Grey, dll</p>
-                    </div>
-                    <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-100 text-center">
-                        <i class="fa-solid fa-scale-balanced text-emerald-600 text-lg mb-1"></i>
-                        <h4 class="text-xs font-bold text-slate-800">Governan & Polisi</h4>
-                        <p id="domainCountGovernance" class="text-lg font-extrabold text-emerald-600">15 <span class="text-xs font-normal">tugas</span></p>
-                        <p class="text-[10px] text-slate-500">C&P, Polisi, SISPA, Risk</p>
-                    </div>
-                    <div class="p-3 rounded-xl bg-slate-100 border border-slate-200 text-center">
-                        <i class="fa-solid fa-folder-open text-slate-600 text-lg mb-1"></i>
-                        <h4 class="text-xs font-bold text-slate-800">Pentadbiran & Khidmat</h4>
-                        <p id="domainCountAdmin" class="text-lg font-extrabold text-slate-700">9 <span class="text-xs font-normal">tugas</span></p>
-                        <p class="text-[10px] text-slate-500">JKPA, JKPAK, Laporan</p>
-                    </div>
-                </div>
-            </div>
         </section>
 
-        <!-- Tab 2: Specialists Individual Deep Dive -->
         <section id="content-specialists" class="tab-content hidden space-y-6">
             <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                 <div>
@@ -265,7 +262,7 @@
                 </div>
                 <div class="flex items-center space-x-2">
                     <button onclick="openRosterModal()" class="px-3 py-1.5 bg-indigo-50 border border-indigo-200 text-indigo-700 hover:bg-indigo-100 rounded-lg text-xs font-semibold transition">
-                        <i class="fa-solid fa-user-plus mr-1"></i> Daftar Pakar / MO Baharu
+                        <i class="fa-solid fa-user-plus mr-1"></i> Daftar Pakar / MO
                     </button>
                     <select id="burdenFilter" onchange="filterSpecialistCards()" class="text-xs border border-slate-300 rounded-lg px-2.5 py-1.5 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500">
                         <option value="all">Semua Tahap Beban</option>
@@ -280,7 +277,7 @@
                 <!-- Dynamically populated via JS -->
             </div>
         </section>
-        <!-- Tab 3: Quality & MSQH Deep Dive -->
+
         <section id="content-quality" class="tab-content hidden space-y-6">
             <div class="bg-gradient-to-r from-rose-900 via-indigo-900 to-slate-900 text-white p-6 rounded-2xl shadow-md">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -302,7 +299,7 @@
                 </div>
             </div>
 
-            <!-- 6 Quality Pillars Grid -->
+            <!-- Quality Pillars Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div>
@@ -316,19 +313,15 @@
                         <p class="text-xs text-slate-600 mt-2">
                             Piawaian fasiliti, peralatan dewan bedah/PAC/dewan bersalin, credentialing, dokumentasi polisi klinikal, dan audit keselamatan.
                         </p>
-                        <div class="mt-4 pt-3 border-t border-slate-100">
-                            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Pakar Bertanggungjawab:</p>
-                            <div class="flex flex-wrap gap-1.5 mt-1.5">
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Dr Norliza</span>
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Dr Simran</span>
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Dr Amilin</span>
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Dr Nur Aini</span>
-                            </div>
-                        </div>
                     </div>
-                    <div class="mt-4 pt-2 bg-slate-50 -mx-5 -mb-5 p-4 rounded-b-2xl border-t border-slate-100">
-                        <span class="text-[11px] text-teal-700 font-semibold block"><i class="fa-solid fa-lightbulb mr-1"></i> Cadangan Tindakan HOD:</span>
-                        <p class="text-[11px] text-slate-600">Tetapkan Dr Norliza sebagai Lead Auditor dalaman; Dr Amilin mengetuai verifikasi bukti dokumentasi.</p>
+                    <div class="mt-4 pt-3 border-t border-slate-100">
+                        <p class="text-[11px] font-semibold text-slate-500 uppercase">Pakar Bertanggungjawab:</p>
+                        <div class="flex flex-wrap gap-1 mt-1">
+                            <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium">Dr Norliza</span>
+                            <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium">Dr Simran</span>
+                            <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium">Dr Amilin</span>
+                            <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium">Dr Nur Aini</span>
+                        </div>
                     </div>
                 </div>
 
@@ -344,132 +337,41 @@
                         <p class="text-xs text-slate-600 mt-2">
                             Pemantauan HPIA/NIA kebangsaan, penunjuk prestasi dewan bersalin (kadar C-Sec, waiting time PAC, infeksi SSI), serta inisiatif Lean Hospital.
                         </p>
-                        <div class="mt-4 pt-3 border-t border-slate-100">
-                            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Pakar Bertanggungjawab:</p>
-                            <div class="flex flex-wrap gap-1.5 mt-1.5">
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Dr Missdalia</span>
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Dr Surekha</span>
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Dr Liyana</span>
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Dr Amilin</span>
-                            </div>
-                        </div>
                     </div>
-                    <div class="mt-4 pt-2 bg-slate-50 -mx-5 -mb-5 p-4 rounded-b-2xl border-t border-slate-100">
-                        <span class="text-[11px] text-blue-700 font-semibold block"><i class="fa-solid fa-lightbulb mr-1"></i> Cadangan Tindakan HOD:</span>
-                        <p class="text-[11px] text-slate-600">Wujudkan papan pemuka bulanan KPI di PAC & Labour Room untuk memantau waktu menunggu dan PPH rate.</p>
+                    <div class="mt-4 pt-3 border-t border-slate-100">
+                        <p class="text-[11px] font-semibold text-slate-500 uppercase">Pakar Bertanggungjawab:</p>
+                        <div class="flex flex-wrap gap-1 mt-1">
+                            <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium">Dr Missdalia</span>
+                            <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium">Dr Surekha</span>
+                            <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium">Dr Liyana</span>
+                            <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium">Dr Amilin</span>
+                        </div>
                     </div>
                 </div>
 
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-3">
-                            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">Keselamatan & Aduan</span>
-                            <span class="text-xs font-semibold text-slate-400">Item 36, 54, 55</span>
-                        </div>
-                        <h4 class="font-bold text-slate-900 text-base flex items-center">
-                            <i class="fa-solid fa-magnifying-glass-chart text-amber-600 mr-2"></i> RCA & Near Miss Reporting
-                        </h4>
-                        <p class="text-xs text-slate-600 mt-2">
-                            Penyiasatan kejadian sentinel, pelaporan near miss tanpa hukuman (no-blame culture), dan penyelesaian aduan awam SISPA mengikut garis masa JKN.
-                        </p>
-                        <div class="mt-4 pt-3 border-t border-slate-100">
-                            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Pakar Bertanggungjawab:</p>
-                            <div class="flex flex-wrap gap-1.5 mt-1.5">
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Dr Liyana (RCA)</span>
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Dr Zulaikha (RCA)</span>
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Dr Norliza (Near Miss)</span>
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Dr Anita & Linda (SISPA)</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-4 pt-2 bg-slate-50 -mx-5 -mb-5 p-4 rounded-b-2xl border-t border-slate-100">
-                        <span class="text-[11px] text-amber-700 font-semibold block"><i class="fa-solid fa-lightbulb mr-1"></i> Cadangan Tindakan HOD:</span>
-                        <p class="text-[11px] text-slate-600">Pastikan RCA diselesaikan dalam tempoh 14 hari. Gunakan mesyuarat bulanan untuk berkongsi pengajaran 'Near Miss'.</p>
-                    </div>
-                </div>
-
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-700">Kajian Mortaliti</span>
-                            <span class="text-xs font-semibold text-slate-400">Item 6, 12, 45</span>
-                        </div>
-                        <h4 class="font-bold text-slate-900 text-base flex items-center">
-                            <i class="fa-solid fa-ribbon text-purple-600 mr-2"></i> CEMD, PNMR & POMR
-                        </h4>
-                        <p class="text-xs text-slate-600 mt-2">
-                            Penyiasatan kematian ibu (CEMD), audit perinatal mortality, dan perioperative mortality review.
-                        </p>
-                        <div class="mt-4 pt-3 border-t border-slate-100">
-                            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Pakar Bertanggungjawab:</p>
-                            <div class="flex flex-wrap gap-1.5 mt-1.5">
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Dr Anita (MM)</span>
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Dr Norliza (MM/POMR)</span>
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Dr Linda (PNMR/POMR)</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-4 pt-2 bg-slate-50 -mx-5 -mb-5 p-4 rounded-b-2xl border-t border-slate-100">
-                        <span class="text-[11px] text-purple-700 font-semibold block"><i class="fa-solid fa-lightbulb mr-1"></i> Cadangan Tindakan HOD:</span>
-                        <p class="text-[11px] text-slate-600">Integrasikan sesi audit PNMR secara bersama dengan Jabatan Pediatrik (Neonatalogi) secara dwibulanan.</p>
-                    </div>
-                </div>
-
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-teal-100 text-teal-700">Audit & Evidens</span>
-                            <span class="text-xs font-semibold text-slate-400">Item 10, 11</span>
-                        </div>
-                        <h4 class="font-bold text-slate-900 text-base flex items-center">
-                            <i class="fa-solid fa-clipboard-check text-teal-600 mr-2"></i> Clinical Audit & Research Loop
-                        </h4>
-                        <p class="text-xs text-slate-600 mt-2">
-                            Penyeliaan audit klinikal MO/pelatih (cth: induksi kelahiran, profilaksis pembedahan) dan menutup kitaran audit (closing the audit loop).
-                        </p>
-                        <div class="mt-4 pt-3 border-t border-slate-100">
-                            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Pakar Bertanggungjawab:</p>
-                            <div class="flex flex-wrap gap-1.5 mt-1.5">
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Dr Norliza</span>
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Dr Liyana</span>
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Dr Hani</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-4 pt-2 bg-slate-50 -mx-5 -mb-5 p-4 rounded-b-2xl border-t border-slate-100">
-                        <span class="text-[11px] text-teal-700 font-semibold block"><i class="fa-solid fa-lightbulb mr-1"></i> Cadangan Tindakan HOD:</span>
-                        <p class="text-[11px] text-slate-600">Setiap MO wajib menyempurnakan sekurang-kurangnya 1 audit klinikal lengkap sebelum tamat perkhidmatan.</p>
-                    </div>
-                </div>
-
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">Digital & Inovasi</span>
+                            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">Inovasi Digital</span>
                             <span class="text-xs font-semibold text-slate-400">Item 78</span>
                         </div>
                         <h4 class="font-bold text-slate-900 text-base flex items-center">
                             <i class="fa-solid fa-robot text-teal-600 mr-2"></i> AI Projects & Digital Health
                         </h4>
                         <p class="text-xs text-slate-600 mt-2">
-                            Penerokaan inovasi klinikal digital, automasi dokumentasi data, pengoptimuman masa dewan bedah, dan analitik O&G pintar.
+                            Penerokaan automasi dokumentasi data pesakit, ramalan keselamatan obstetrik pintar, dan analitik masa nyata dewan bedah.
                         </p>
-                        <div class="mt-4 pt-3 border-t border-slate-100">
-                            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Pakar Bertanggungjawab:</p>
-                            <div class="flex flex-wrap gap-1.5 mt-1.5">
-                                <span class="px-2 py-0.5 bg-teal-100 text-teal-800 rounded text-xs font-bold">Dr Hajar (Lead)</span>
-                                <span class="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium text-slate-800">Pasukan Digital HTPN</span>
-                            </div>
-                        </div>
                     </div>
-                    <div class="mt-4 pt-2 bg-slate-50 -mx-5 -mb-5 p-4 rounded-b-2xl border-t border-slate-100">
-                        <span class="text-[11px] text-teal-700 font-semibold block"><i class="fa-solid fa-lightbulb mr-1"></i> Cadangan Tindakan HOD:</span>
-                        <p class="text-[11px] text-slate-600">Integrasikan sistem amaran awal keselamatan pesakit obstetrik secara berfasa.</p>
+                    <div class="mt-4 pt-3 border-t border-slate-100">
+                        <p class="text-[11px] font-semibold text-slate-500 uppercase">Pakar Bertanggungjawab:</p>
+                        <div class="flex flex-wrap gap-1 mt-1">
+                            <span class="px-2 py-0.5 bg-teal-100 text-teal-800 rounded text-xs font-bold">Dr Hajar (Lead)</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
-        <!-- Tab 4: Master Task Matrix (Major vs Minor) -->
+
         <section id="content-matrix" class="tab-content hidden space-y-4">
             <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3">
                 <div class="relative flex-1">
@@ -478,25 +380,13 @@
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
                     <select id="typeFilter" onchange="filterTasksTable()" class="text-xs border border-slate-300 rounded-xl px-3 py-2 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500">
-                        <option value="all">Semua Jenis (Major & Minor)</option>
-                        <option value="major">Tugasan Major Sahaja</option>
-                        <option value="minor">Tugasan Minor Sahaja</option>
+                        <option value="all">Semua Jenis</option>
+                        <option value="major">Major Sahaja</option>
+                        <option value="minor">Minor Sahaja</option>
                     </select>
-
-                    <select id="domainFilter" onchange="filterTasksTable()" class="text-xs border border-slate-300 rounded-xl px-3 py-2 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500">
-                        <option value="all">Semua Kategori</option>
-                        <option value="quality">Kualiti, Audit & Keselamatan</option>
-                        <option value="clinical">Klinikal & Prosedur</option>
-                        <option value="training">Latihan & Akademik</option>
-                        <option value="emergency">Kecemasan & Kod Bencana</option>
-                        <option value="governance">Governan, Polisi & Medico-legal</option>
-                        <option value="admin">Pentadbiran & Khidmat Sokongan</option>
-                    </select>
-
                     <select id="specialistFilter" onchange="filterTasksTable()" class="text-xs border border-slate-300 rounded-xl px-3 py-2 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500">
                         <option value="all">Semua Pakar</option>
                     </select>
-
                     <button onclick="openAddTaskModal()" class="px-3.5 py-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center space-x-1.5 whitespace-nowrap">
                         <i class="fa-solid fa-plus"></i>
                         <span>Tambah Tugasan</span>
@@ -515,7 +405,7 @@
                                 <th class="py-3 px-3 text-center">Klasifikasi</th>
                                 <th class="py-3 px-3">Kategori</th>
                                 <th class="py-3 px-4">Pakar Bertanggungjawab</th>
-                                <th class="py-3 px-4">Pegawai Perubatan (MO) / Matron / Sister</th>
+                                <th class="py-3 px-4">Pegawai Perubatan (MO) / Pasukan</th>
                                 <th class="py-3 px-3 text-center w-24">Tindakan</th>
                             </tr>
                         </thead>
@@ -525,13 +415,12 @@
                     </table>
                 </div>
                 <div class="bg-slate-50 px-4 py-2.5 border-t border-slate-200 text-xs text-slate-500 flex justify-between items-center">
-                    <span id="taskCountDisplay">Memaparkan semua tugasan jabatan O&G</span>
-                    <span class="text-[11px] text-slate-400">Pangkalan Data Awan: htpn-og-taskforce</span>
+                    <span id="taskCountDisplay">Memaparkan semua tugasan</span>
+                    <span class="text-[11px] text-slate-400 font-mono">Pangkalan Data Awan: htpn-og-taskforce</span>
                 </div>
             </div>
         </section>
 
-        <!-- Tab 5: HOD Strategic Recommendations & Rebalancing Plan -->
         <section id="content-hod-strategy" class="tab-content hidden space-y-6">
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                 <div class="flex items-center space-x-3 mb-4">
@@ -539,7 +428,7 @@
                         <i class="fa-solid fa-chess-knight"></i>
                     </div>
                     <div>
-                        <h3 class="text-lg font-bold text-slate-900">Pelan Strategik HOD: Pengurusan Kualiti & Penstrukturan Beban Pakar</h3>
+                        <h3 class="text-lg font-bold text-slate-900">Pelan Strategik HOD: Penstrukturan & Imbangan Beban Pakar</h3>
                         <p class="text-xs text-slate-500">Prinsip agihan: Keseimbangan klinikal-akademik, perlindungan daripada keletihan, dan pemerkasaan MSQH.</p>
                     </div>
                 </div>
@@ -561,7 +450,7 @@
                     <div class="p-4 rounded-xl border border-amber-200 bg-amber-50/60">
                         <div class="flex items-center space-x-2 text-amber-800 font-bold text-sm mb-1">
                             <i class="fa-solid fa-cubes-stacked text-amber-600"></i>
-                            <h4>2. Kluster Kod Kecemasan Terpusat</h4>
+                            <h4>2. Kluster Kod Kecemasan</h4>
                         </div>
                         <p class="text-xs text-slate-600 mt-1">
                             <strong>Dr Zulaikha & Dr Hani</strong> memegang hampir kesemua 6 Kod Kecemasan serentak (Blue, Amber, Grey, Black, Matahari, Red).
@@ -574,7 +463,7 @@
                     <div class="p-4 rounded-xl border border-emerald-200 bg-emerald-50/60">
                         <div class="flex items-center space-x-2 text-emerald-800 font-bold text-sm mb-1">
                             <i class="fa-solid fa-battery-half text-emerald-600"></i>
-                            <h4>3. Ruang Kapasiti Belum Dioptimumkan</h4>
+                            <h4>3. Kapasiti Belum Dioptimumkan</h4>
                         </div>
                         <p class="text-xs text-slate-600 mt-1">
                             <strong>Dr Amilin (6 tugas)</strong> dan <strong>Dr Aida (9 tugas)</strong> mempunyai kapasiti luwes untuk menerima portfolio sokongan MSQH dan audit.
@@ -588,7 +477,7 @@
         </section>
     </main>
 
-    <!-- Modal: Urus Warga (Pakar & Pegawai Perubatan) -->
+    <!-- Modal: Urus Warga -->
     <div id="rosterModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh]">
             <div class="p-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
@@ -613,22 +502,14 @@
                     </button>
                     <button id="rosterTabBtnMos" onclick="switchRosterSubTab('mos')" class="pb-2 text-xs font-semibold text-slate-500 hover:text-slate-800 border-b-2 border-transparent flex items-center space-x-1.5">
                         <i class="fa-solid fa-user-nurse"></i>
-                        <span>Direktori MO & Pasukan Klinikal</span>
+                        <span>Direktori MO & Pasukan Wad</span>
                     </button>
                 </div>
             </div>
 
-            <div class="p-6 overflow-y-auto space-y-6 custom-scrollbar flex-1">
-                <!-- Subtab 1: Specialists Management -->
-                <div id="rosterSectionSpecialists" class="space-y-5">
-                    <div class="bg-indigo-50/70 border border-indigo-100 p-4 rounded-xl flex flex-col md:flex-row items-center justify-between gap-3">
-                        <div class="flex items-center space-x-2 text-xs text-indigo-900">
-                            <i class="fa-solid fa-circle-info text-indigo-600 text-sm"></i>
-                            <span>Pakar yang didaftarkan akan terus muncul dalam senarai pilihan portfolio serta papan pemuka analisis beban.</span>
-                        </div>
-                    </div>
-
-                    <!-- Add Specialist Form -->
+            <div class="p-5 overflow-y-auto space-y-5 custom-scrollbar flex-1">
+                <!-- Subtab 1: Specialists -->
+                <div id="rosterSectionSpecialists" class="space-y-4">
                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
                         <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3 flex items-center">
                             <i class="fa-solid fa-user-plus text-indigo-600 mr-1.5"></i> Daftar Pakar Baharu Masuk Jabatan
@@ -646,7 +527,6 @@
                         </div>
                     </div>
 
-                    <!-- Current Specialists Table -->
                     <div>
                         <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Senarai Pakar Semasa O&G:</h4>
                         <div class="border border-slate-200 rounded-xl overflow-hidden">
@@ -668,13 +548,13 @@
                     </div>
                 </div>
 
-                <!-- Subtab 2: MOs Management -->
-                <div id="rosterSectionMos" class="hidden space-y-5">
+                <!-- Subtab 2: MOs Handover -->
+                <div id="rosterSectionMos" class="hidden space-y-4">
                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3 flex items-center">
-                            <i class="fa-solid fa-arrows-rotate text-teal-600 mr-1.5"></i> Gantikan MO Bertukar (Handover Pantas 1-Klik)
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2 flex items-center">
+                            <i class="fa-solid fa-arrows-rotate text-teal-600 mr-1.5"></i> Pertukaran Pantas MO (Batch Handover)
                         </h4>
-                        <p class="text-xs text-slate-500 mb-3">Tukarkan nama Pegawai Perubatan yang telah tamat giliran posting ke atas semua tugasan jabatan serentak:</p>
+                        <p class="text-xs text-slate-500 mb-3">Tukarkan nama Pegawai Perubatan yang tamat posting ke atas semua tugasan jabatan serentak:</p>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                             <div>
                                 <label class="block text-[11px] font-semibold text-slate-600 mb-1">Nama MO Lama (Pindah Keluar):</label>
@@ -695,7 +575,7 @@
 
                     <div>
                         <div class="flex items-center justify-between mb-2">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700">Senarai Pegawai Perubatan (MO) & Tugasan Ditugaskan:</h4>
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700">Senarai Pegawai Perubatan (MO) Bertugas:</h4>
                             <span id="detectedMoCount" class="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-semibold">0 Dikesan</span>
                         </div>
                         <div class="border border-slate-200 rounded-xl overflow-hidden max-h-72 overflow-y-auto custom-scrollbar">
@@ -703,7 +583,7 @@
                                 <thead class="bg-slate-100 text-slate-700 font-semibold sticky top-0 border-b border-slate-200">
                                     <tr>
                                         <th class="p-3 w-12 text-center">No</th>
-                                        <th class="p-3">Nama Pegawai Perubatan (MO) / Kakitangan</th>
+                                        <th class="p-3">Nama Pegawai Perubatan (MO)</th>
                                         <th class="p-3 text-center">Bilangan Tugasan Terlibat</th>
                                         <th class="p-3 text-center w-28">Tindakan</th>
                                     </tr>
@@ -724,156 +604,8 @@
             </div>
         </div>
     </div>
-    <!-- Modal: Delete / Transfer Specialist Confirmation -->
-    <div id="deleteSpecialistModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 overflow-hidden p-6 space-y-4">
-            <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl mx-auto shadow-inner">
-                <i class="fa-solid fa-user-xmark"></i>
-            </div>
-            <div class="text-center">
-                <h4 class="font-bold text-base text-slate-900">Keluarkan Pakar Daripada Jabatan?</h4>
-                <p class="text-xs text-slate-600 mt-1">
-                    Anda sedang memadam rekod <strong id="deleteSpecialistNameDisplay" class="text-rose-600"></strong> yang mempunyai <span id="deleteSpecialistTaskCountDisplay" class="font-bold text-slate-800">0</span> portfolio aktif.
-                </p>
-            </div>
 
-            <div class="bg-amber-50 border border-amber-200 p-3.5 rounded-xl space-y-2">
-                <label class="block text-xs font-bold text-amber-900">Pilih tindakan bagi portfolio sedia ada beliau:</label>
-                <div class="space-y-1.5 text-xs text-amber-900">
-                    <label class="flex items-center space-x-2 cursor-pointer">
-                        <input type="radio" name="specialistTaskAction" value="reassign" checked class="text-indigo-600 focus:ring-indigo-500">
-                        <span>Pindahkan semua portfolio kepada pakar pengganti:</span>
-                    </label>
-                    <select id="reassignTargetSpecialistSelect" class="w-full mt-1 px-3 py-1.5 border border-slate-300 rounded-lg text-xs bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <!-- Populated by JS -->
-                    </select>
-                    <label class="flex items-center space-x-2 cursor-pointer pt-2">
-                        <input type="radio" name="specialistTaskAction" value="remove_only" class="text-rose-600 focus:ring-rose-500">
-                        <span>Gugurkan nama pakar sahaja (kekalkan pakar bersama yang lain)</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="flex items-center space-x-3 pt-2">
-                <button type="button" onclick="closeDeleteSpecialistModal()" class="flex-1 py-2.5 border border-slate-300 text-slate-700 hover:bg-slate-100 text-xs font-semibold rounded-xl transition">
-                    Batal
-                </button>
-                <button type="button" onclick="executeDeleteSpecialist()" class="flex-1 py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center justify-center space-x-1.5">
-                    <i class="fa-solid fa-trash-can"></i>
-                    <span>Sahkan Padam Pakar</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal: Delete MO Confirmation -->
-    <div id="deleteMoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-slate-200 overflow-hidden p-6 space-y-4">
-            <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl mx-auto shadow-inner">
-                <i class="fa-solid fa-user-minus"></i>
-            </div>
-            <div class="text-center">
-                <h4 class="font-bold text-base text-slate-900">Keluarkan Pegawai Perubatan (MO)?</h4>
-                <p class="text-xs text-slate-600 mt-1">
-                    Adakah anda pasti mahu memadamkan nama <strong id="deleteMoNameDisplay" class="text-slate-900"></strong> daripada kesemua baris tugasan jabatan?
-                </p>
-            </div>
-            <div class="flex items-center space-x-3 pt-2">
-                <button type="button" onclick="closeDeleteMoModal()" class="flex-1 py-2.5 border border-slate-300 text-slate-700 hover:bg-slate-100 text-xs font-semibold rounded-xl transition">
-                    Batal
-                </button>
-                <button type="button" onclick="executeDeleteMo()" class="flex-1 py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center justify-center space-x-1.5">
-                    <i class="fa-solid fa-user-slash"></i>
-                    <span>Padam Nama MO</span>
-                </button>
-            </div>
-        </div>
-    </div>
-    <!-- Document Upload & AI Parser Modal -->
-    <div id="uploadModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
-            <div class="p-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center text-lg shadow-sm">
-                        <i class="fa-solid fa-file-circle-plus"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-base text-slate-900">Muat Naik Fail Senarai Tugas Terkini (PDF / Word)</h3>
-                        <p class="text-xs text-slate-500">Pengekstrakan pintar format PDF atau Word (.docx) dengan pemprosesan AI O&G</p>
-                    </div>
-                </div>
-                <button onclick="closeUploadModal()" class="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-500 flex items-center justify-center text-sm transition">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <div class="p-6 overflow-y-auto space-y-5 custom-scrollbar">
-                <div id="dropZone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)" onclick="document.getElementById('docFileInput').click()" class="border-2 border-dashed border-teal-300 hover:border-teal-500 bg-teal-50/40 hover:bg-teal-50 rounded-2xl p-8 text-center cursor-pointer transition">
-                    <input type="file" id="docFileInput" accept=".pdf,.docx,.doc,.txt,.json" onchange="handleFileSelect(event)" class="hidden">
-                    <div class="w-16 h-16 rounded-2xl bg-teal-100 text-teal-700 mx-auto flex items-center justify-center text-2xl mb-3 shadow-inner">
-                        <i class="fa-solid fa-file-arrow-up"></i>
-                    </div>
-                    <h4 class="font-bold text-slate-800 text-sm">Pilih fail atau seret & lepas ke sini</h4>
-                    <p class="text-xs text-slate-500 mt-1">Menyokong dokumen PDF (.pdf), Microsoft Word (.docx), atau sandaran JSON (.json)</p>
-                </div>
-
-                <div id="uploadStatusSection" class="hidden p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
-                    <div class="flex items-center justify-between text-xs">
-                        <span id="uploadStatusText" class="font-semibold text-slate-700 flex items-center">
-                            <i class="fa-solid fa-circle-notch fa-spin mr-2 text-teal-600"></i> Membaca dokumen...
-                        </span>
-                        <span id="uploadPercentText" class="text-slate-500 font-mono">0%</span>
-                    </div>
-                    <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                        <div id="uploadProgressBar" class="bg-teal-600 h-2 rounded-full transition-all duration-300 w-1/4"></div>
-                    </div>
-                    <p id="uploadSubStatus" class="text-[11px] text-slate-500">Mengekstrak jadual tugasan, pakar & pegawai perubatan...</p>
-                </div>
-
-                <div id="extractedPreviewSection" class="hidden space-y-3">
-                    <div class="flex items-center justify-between">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center">
-                            <i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i>
-                            Pratonton Data Dikesan (<span id="parsedTaskCount">0</span> Tugas Ditemui)
-                        </h4>
-                        <span id="parsedSpecialistsCount" class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
-                            0 Pakar Dikesan
-                        </span>
-                    </div>
-                    <div class="max-h-60 overflow-y-auto border border-slate-200 rounded-xl custom-scrollbar">
-                        <table class="w-full text-left text-xs border-collapse">
-                            <thead class="bg-slate-100 text-slate-700 font-semibold sticky top-0">
-                                <tr>
-                                    <th class="p-2 w-10 text-center">No</th>
-                                    <th class="p-2">Deskripsi Tugas</th>
-                                    <th class="p-2">Tahap</th>
-                                    <th class="p-2">Pakar Bertanggungjawab</th>
-                                </tr>
-                            </thead>
-                            <tbody id="parsedPreviewTableBody" class="divide-y divide-slate-100 text-[11px]">
-                                <!-- Filled dynamically -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-4 border-t border-slate-200 bg-slate-50 flex justify-between items-center">
-                <button onclick="exportCurrentDataAsJson()" class="px-3 py-1.5 text-xs text-slate-600 hover:text-slate-900 border border-slate-300 rounded-xl bg-white hover:bg-slate-50 transition">
-                    <i class="fa-solid fa-download mr-1"></i> Simpan Salinan JSON
-                </button>
-                <div class="flex items-center space-x-2">
-                    <button onclick="closeUploadModal()" class="px-4 py-2 border border-slate-300 text-slate-700 hover:bg-slate-100 text-xs font-semibold rounded-xl transition">
-                        Batal
-                    </button>
-                    <button id="applyParsedDataBtn" onclick="confirmApplyUploadedData()" disabled class="px-5 py-2 bg-slate-300 text-slate-500 cursor-not-allowed text-xs font-bold rounded-xl transition shadow-sm">
-                        Gunakan Data Terkini
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Detailed Specialist Modal Dialog -->
+    <!-- Modal: Specialist Detail -->
     <div id="specialistModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
             <div class="p-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
@@ -883,7 +615,7 @@
                     </div>
                     <div>
                         <h3 id="modalName" class="font-bold text-base text-slate-900">Dr Name</h3>
-                        <p id="modalSubtext" class="text-xs text-slate-500">Pakar Perbidanan & Sakit Puan</p>
+                        <p class="text-xs text-slate-500">Pakar Perbidanan & Sakit Puan</p>
                     </div>
                 </div>
                 <button onclick="closeSpecialistModal()" class="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-500 flex items-center justify-center text-sm transition">
@@ -920,24 +652,20 @@
                 </div>
             </div>
 
-            <div class="p-4 border-t border-slate-200 bg-slate-50 flex justify-between items-center">
-                <button type="button" onclick="promptDeleteSpecialistFromDetail()" class="px-3.5 py-2 text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-xl text-xs font-bold transition flex items-center space-x-1.5">
-                    <i class="fa-solid fa-user-xmark"></i>
-                    <span>Keluarkan Pakar Ini</span>
-                </button>
-                <button onclick="closeSpecialistModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded-xl transition">
+            <div class="p-4 border-t border-slate-200 bg-slate-50 flex justify-end">
+                <button onclick="closeSpecialistModal()" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded-xl transition">
                     Tutup
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Add / Edit Task Modal Dialog -->
+    <!-- Modal: Add / Edit Task -->
     <div id="taskModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-xl rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh]">
             <div class="p-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center space-x-3">
-                    <div id="taskModalIcon" class="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center text-lg shadow-sm">
+                    <div class="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center text-lg shadow-sm">
                         <i class="fa-solid fa-list-check"></i>
                     </div>
                     <div>
@@ -955,7 +683,7 @@
 
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nama Portfolio / Deskripsi Tugasan *</label>
-                    <input type="text" id="taskFormName" required placeholder="Contoh: Audit C-Section, Polisi Dewan Bersalin, Pengurusan Aset" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    <input type="text" id="taskFormName" required placeholder="Contoh: Audit C-Section, Polisi PAC, Resus" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500">
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -980,9 +708,33 @@
                     </div>
                 </div>
 
+                <!-- Dedicated Main Lead / PIC Mesyuarat Section -->
+                <div class="bg-amber-50 p-3.5 rounded-xl border border-amber-200 space-y-2.5">
+                    <div class="flex items-center space-x-1.5 text-amber-900 font-bold text-xs uppercase tracking-wider">
+                        <i class="fa-solid fa-crown text-amber-500"></i>
+                        <span>Main Person (Ketua / PIC Mesyuarat Wajib - Max 2)</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-amber-800 mb-1">Ketua Utama 1 (Lead 1) *</label>
+                            <select id="taskFormLead1" required onchange="handleLeadChange()" class="w-full px-3 py-1.5 border border-amber-300 rounded-lg text-xs bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 font-semibold">
+                                <option value="">-- Pilih Ketua Utama --</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-amber-800 mb-1">Ketua Bersama 2 (Lead 2 - Pilihan)</label>
+                            <select id="taskFormLead2" onchange="handleLeadChange()" class="w-full px-3 py-1.5 border border-amber-300 rounded-lg text-xs bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 font-semibold">
+                                <option value="">-- Tiada Ketua Bersama --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Pakar Bertanggungjawab (Pilih 1 atau lebih) *</label>
-                    <div id="specialistCheckboxContainer" class="grid grid-cols-2 sm:grid-cols-3 gap-2 p-3 bg-slate-50 border border-slate-200 rounded-xl max-h-40 overflow-y-auto custom-scrollbar"></div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                        <i class="fa-solid fa-users text-teal-600 mr-1"></i>Pakar Sokongan / Ahli Pasukan (Tandakan jika ada)
+                    </label>
+                    <div id="specialistCheckboxContainer" class="grid grid-cols-2 sm:grid-cols-3 gap-2 p-3 bg-slate-50 border border-slate-200 rounded-xl max-h-36 overflow-y-auto custom-scrollbar"></div>
                 </div>
 
                 <div>
@@ -1002,31 +754,31 @@
             </form>
         </div>
     </div>
-    <!-- Custom Delete Task Confirmation Modal -->
-    <div id="deleteConfirmModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-slate-200 overflow-hidden p-6 space-y-4">
-            <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl mx-auto shadow-inner">
-                <i class="fa-solid fa-triangle-exclamation"></i>
+
+    <!-- Modal: Upload PDF / Word -->
+    <div id="uploadModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-xl rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col p-6 space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+                <h3 class="font-bold text-slate-900 text-base">Muat Naik Fail Senarai Tugas (PDF / Word)</h3>
+                <button onclick="closeUploadModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="text-center">
-                <h4 class="font-bold text-base text-slate-900">Padam Portfolio Tugasan?</h4>
-                <p class="text-xs text-slate-500 mt-1">
-                    Adakah anda pasti mahu memadamkan tugasan <span id="deleteTaskNameDisplay" class="font-bold text-slate-800"></span>?
-                </p>
+            <div onclick="document.getElementById('docFileInput').click()" class="border-2 border-dashed border-teal-300 hover:border-teal-500 bg-teal-50/40 rounded-2xl p-8 text-center cursor-pointer transition">
+                <input type="file" id="docFileInput" accept=".pdf,.docx,.doc,.txt,.json" onchange="handleFileSelect(event)" class="hidden">
+                <i class="fa-solid fa-file-arrow-up text-3xl text-teal-600 mb-2"></i>
+                <h4 class="font-bold text-slate-800 text-sm">Pilih fail dokumen O&G</h4>
+                <p class="text-xs text-slate-500 mt-1">Menyokong PDF (.pdf), Microsoft Word (.docx), atau sandaran JSON</p>
             </div>
-            <div class="flex items-center space-x-3 pt-2">
-                <button type="button" onclick="closeDeleteConfirmModal()" class="flex-1 py-2.5 border border-slate-300 text-slate-700 hover:bg-slate-100 text-xs font-semibold rounded-xl transition">
-                    Batal
+            <div class="flex justify-between items-center pt-2">
+                <button onclick="exportCurrentDataAsJson()" class="px-3 py-1.5 text-xs text-slate-600 hover:text-slate-900 border border-slate-300 rounded-xl bg-white">
+                    <i class="fa-solid fa-download mr-1"></i> Eksport JSON
                 </button>
-                <button type="button" onclick="executeDeleteTask()" class="flex-1 py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center justify-center space-x-1">
-                    <i class="fa-solid fa-trash-can mr-1"></i> Padam
-                </button>
+                <button onclick="closeUploadModal()" class="px-4 py-2 border border-slate-300 text-slate-700 rounded-xl text-xs font-semibold">Tutup</button>
             </div>
         </div>
     </div>
 
-    <!-- Notification Toast Element -->
-    <div id="customToast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 max-w-sm bg-slate-900 text-white p-4 rounded-xl shadow-xl border border-slate-800 flex items-start space-x-3">
+    <!-- Notification Toast -->
+    <div id="customToast" class="fixed bottom-5 right-5 z-50 transform translate-y-24 opacity-0 transition-all duration-300 max-w-sm bg-slate-900 text-white p-4 rounded-xl shadow-2xl border border-slate-800 flex items-start space-x-3">
         <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-base mt-0.5"></i>
         <div class="flex-1">
             <h5 id="toastTitle" class="text-xs font-bold">Pemberitahuan</h5>
@@ -1034,13 +786,11 @@
         </div>
     </div>
 
-    <!-- Firebase SDK Imports & Real-time Cloud Implementation -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Global environment configs with user's official Firebase deployment
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'htpn-og-taskforce';
         const officialFirebaseConfig = {
             apiKey: "AIzaSyCFh3t56uNywF1E479vp7H9OPbb4Q328RU",
@@ -1057,30 +807,24 @@
         let currentUser = null;
         let isCloudConnected = false;
 
-        function setCloudStatus(status, text) {
+        function updateCloudBadge(status, label) {
             const badge = document.getElementById('cloudSyncBadge');
             const icon = document.getElementById('cloudSyncIcon');
-            const label = document.getElementById('cloudSyncText');
-            if (!badge || !icon || !label) return;
+            const text = document.getElementById('cloudSyncText');
+            if (!badge || !icon || !text) return;
 
             if (status === 'connected') {
-                badge.className = "inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 transition-all";
-                icon.className = "fa-solid fa-cloud mr-1.5 text-emerald-600";
-                label.textContent = text || "Awan Bersambung (Live)";
-                const userBar = document.getElementById('cloudUserBar');
-                if (userBar) userBar.classList.remove('hidden');
+                badge.className = "inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-semibold bg-emerald-100 text-emerald-800 shrink-0";
+                icon.className = "fa-solid fa-cloud mr-1 text-emerald-600";
+                text.textContent = label || "Awan Live";
             } else if (status === 'syncing') {
-                badge.className = "inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 transition-all";
-                icon.className = "fa-solid fa-arrows-rotate fa-spin mr-1.5 text-blue-600";
-                label.textContent = text || "Menyimpan ke Awan...";
-            } else if (status === 'offline') {
-                badge.className = "inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 transition-all";
-                icon.className = "fa-solid fa-hard-drive mr-1.5 text-slate-500";
-                label.textContent = text || "Mod Tempatan (Offline)";
-            } else if (status === 'error') {
-                badge.className = "inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-100 text-rose-800 transition-all";
-                icon.className = "fa-solid fa-triangle-exclamation mr-1.5 text-rose-600";
-                label.textContent = text || "Ralat Sambungan Awan";
+                badge.className = "inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-semibold bg-blue-100 text-blue-800 shrink-0";
+                icon.className = "fa-solid fa-arrows-rotate fa-spin mr-1 text-blue-600";
+                text.textContent = label || "Menyimpan...";
+            } else {
+                badge.className = "inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-semibold bg-slate-100 text-slate-700 shrink-0";
+                icon.className = "fa-solid fa-hard-drive mr-1 text-slate-500";
+                text.textContent = "Offline (Local)";
             }
         }
 
@@ -1090,7 +834,6 @@
                 db = getFirestore(app);
                 auth = getAuth(app);
 
-                // Authentication prior to running queries (RULE 3)
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     const cred = await signInWithCustomToken(auth, __initial_auth_token);
                     currentUser = cred.user;
@@ -1101,21 +844,16 @@
 
                 if (!currentUser) throw new Error("Gagal mengesahkan pengguna.");
 
-                const userIdDisplay = document.getElementById('currentUserIdDisplay');
-                if (userIdDisplay) userIdDisplay.textContent = currentUser.uid;
-
                 isCloudConnected = true;
-                setCloudStatus('connected', 'Awan Bersambung (Live)');
+                updateCloudBadge('connected', 'Awan Live');
 
-                // Public collection reference according to RULE 1
                 const tasksCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'tasks');
 
-                // Real-time synchronization listener with error callback
                 onSnapshot(tasksCollectionRef, async (snapshot) => {
                     if (snapshot.empty) {
-                        setCloudStatus('syncing', 'Menyemai Data Awal...');
-                        await seedInitialDataToCloud(tasksCollectionRef);
-                        setCloudStatus('connected', 'Awan Bersambung (Live)');
+                        updateCloudBadge('syncing', 'Menyemai Data...');
+                        await seedInitialData(tasksCollectionRef);
+                        updateCloudBadge('connected', 'Awan Live');
                         return;
                     }
 
@@ -1124,72 +862,69 @@
                         cloudTasks.push(docSnap.data());
                     });
 
-                    // Sort in memory by ID (RULE 2)
                     cloudTasks.sort((a, b) => a.id - b.id);
                     window.updateAppTasksFromCloud(cloudTasks);
-                    setCloudStatus('connected', `Awan Terkini (${cloudTasks.length} Tugas)`);
+                    updateCloudBadge('connected', `Awan Live (${cloudTasks.length})`);
                 }, (error) => {
-                    console.error("Firestore onSnapshot error:", error);
-                    setCloudStatus('error', 'Ralat Sinkronisasi');
+                    console.warn("Firestore snapshot notice:", error);
+                    updateCloudBadge('offline');
                 });
 
             } catch (err) {
-                console.warn("Operating in offline fallback mode:", err);
-                setCloudStatus('offline', 'Mod Tempatan (Offline)');
+                console.warn("Cloud connecting fallback:", err);
+                updateCloudBadge('offline');
             }
         }
 
-        async function seedInitialDataToCloud(collectionRef) {
+        async function seedInitialData(colRef) {
             try {
                 const batch = writeBatch(db);
                 defaultTasksData.forEach(task => {
-                    const docRef = doc(collectionRef, `task_${task.id}`);
+                    const docRef = doc(colRef, `task_${task.id}`);
                     batch.set(docRef, task);
                 });
                 await batch.commit();
-                window.showNotification("Penyegerakan Awan Berjaya", "Data asas jabatan O&G telah diselaraskan ke pangkalan data awan htpn-og-taskforce.");
-            } catch (seedErr) {
-                console.error("Failed to seed initial data:", seedErr);
+            } catch (e) {
+                console.warn("Seeding notice:", e);
             }
         }
 
         window.cloudSaveTask = async function(task) {
-            if (!isCloudConnected || !db || !auth.currentUser) return false;
-            setCloudStatus('syncing', 'Menyimpan...');
+            if (!isCloudConnected || !db || !auth?.currentUser) return false;
+            updateCloudBadge('syncing', 'Menyimpan...');
             try {
                 const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', `task_${task.id}`);
                 await setDoc(docRef, task);
-                setCloudStatus('connected', 'Awan Terkini');
+                updateCloudBadge('connected', 'Awan Live');
                 return true;
             } catch (err) {
-                console.error("Cloud save task error:", err);
+                console.error("Cloud save error:", err);
                 return false;
             }
         };
 
         window.cloudDeleteTask = async function(taskId) {
-            if (!isCloudConnected || !db || !auth.currentUser) return false;
-            setCloudStatus('syncing', 'Memadam di Awan...');
+            if (!isCloudConnected || !db || !auth?.currentUser) return false;
+            updateCloudBadge('syncing', 'Memadam...');
             try {
                 const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', `task_${taskId}`);
                 await deleteDoc(docRef);
-                setCloudStatus('connected', 'Awan Terkini');
+                updateCloudBadge('connected', 'Awan Live');
                 return true;
             } catch (err) {
-                console.error("Cloud delete task error:", err);
+                console.error("Cloud delete error:", err);
                 return false;
             }
         };
 
         window.cloudReplaceAllTasks = async function(newTasks) {
-            if (!isCloudConnected || !db || !auth.currentUser) return false;
-            setCloudStatus('syncing', 'Mengemaskini Semua ke Awan...');
+            if (!isCloudConnected || !db || !auth?.currentUser) return false;
+            updateCloudBadge('syncing', 'Menyegerak...');
             try {
                 const tasksCol = collection(db, 'artifacts', appId, 'public', 'data', 'tasks');
-                const existingSnaps = await getDocs(tasksCol);
-                
+                const snaps = await getDocs(tasksCol);
                 const batch1 = writeBatch(db);
-                existingSnaps.forEach(docSnap => batch1.delete(docSnap.ref));
+                snaps.forEach(docSnap => batch1.delete(docSnap.ref));
                 await batch1.commit();
 
                 const batch2 = writeBatch(db);
@@ -1198,10 +933,10 @@
                     batch2.set(docRef, task);
                 });
                 await batch2.commit();
-                setCloudStatus('connected', `Awan Terkini (${newTasks.length} Tugas)`);
+                updateCloudBadge('connected', `Awan Live (${newTasks.length})`);
                 return true;
             } catch (err) {
-                console.error("Cloud bulk update error:", err);
+                console.error("Cloud bulk error:", err);
                 return false;
             }
         };
@@ -1211,7 +946,6 @@
         });
     </script>
 
-    <!-- Core Application Logic & Roster Engine -->
     <script>
         const defaultTasksData = [
             { id: 1, name: "Credentialing & Priviledging", type: "Major", domain: "governance", domainLabel: "Governan & Polisi", specialists: ["Dr Anita", "Dr Norliza", "Dr Simran"], mo: "Dr Aini / Dr Fatin, Dr Hazimah" },
@@ -1358,7 +1092,658 @@
             renderSpecialistGrid();
             initializeCharts();
             updateTopMetrics();
+            renderQuickLookupCards(document.getElementById('quickLookupInput')?.value || '');
         };
+
+        // Render Quick Lookup Directory Cards
+        function renderQuickLookupCards(query = '') {
+            const container = document.getElementById('quickLookupGrid');
+            if (!container) return;
+
+            const q = (query || '').toLowerCase().trim();
+            const filtered = tasksData.filter(t => {
+                if (!q) return true;
+                const matchName = (t.name || '').toLowerCase().includes(q);
+                const matchDomain = (t.domainLabel || '').toLowerCase().includes(q);
+                const matchSpec = t.specialists && t.specialists.some(s => s.toLowerCase().includes(q));
+                const matchMo = (t.mo || '').toLowerCase().includes(q);
+                return matchName || matchDomain || matchSpec || matchMo;
+            });
+
+            const countBadge = document.getElementById('quickLookupResultCount');
+            if (countBadge) countBadge.textContent = `${filtered.length} Portfolio Ditemui`;
+
+            container.innerHTML = '';
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full bg-white p-8 rounded-2xl border border-slate-200 text-center space-y-2">
+                        <i class="fa-solid fa-magnifying-glass text-3xl text-slate-300"></i>
+                        <h4 class="font-bold text-slate-700 text-sm">Tiada Portfolio Ditemui</h4>
+                        <p class="text-xs text-slate-500">Cuba taip kata kunci lain seperti "Code Red", "OT Book", "Dr Norliza", atau nama MO.</p>
+                        <button onclick="setQuickLookupFilter('')" class="mt-2 px-3 py-1 bg-teal-600 text-white text-xs font-semibold rounded-lg shadow-sm">
+                            Papar Semua Portfolio
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(task => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-4 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-3";
+
+                const isMajor = task.type === 'Major';
+                const typeBadge = isMajor
+                    ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200"><i class="fa-solid fa-star mr-1 text-[9px]"></i>Major</span>`
+                    : `<span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-teal-100 text-teal-700 border border-teal-200">Minor</span>`;
+
+                const leads = Array.isArray(task.leads) && task.leads.length > 0 
+                    ? task.leads 
+                    : (task.specialists && task.specialists.length > 0 ? [task.specialists[0]] : []);
+                
+                const supporting = (task.specialists || []).filter(s => !leads.includes(s));
+
+                const leadsBadges = leads.map(s => `
+                    <span class="inline-flex items-center px-2 py-1 rounded-lg text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300 mr-1 mb-1 shadow-2xs">
+                        <i class="fa-solid fa-crown text-amber-600 mr-1 text-[11px]"></i>${s}
+                    </span>
+                `).join('');
+
+                const supportingBadges = supporting.map(s => `
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200 mr-1 mb-1">
+                        ${s}
+                    </span>
+                `).join('');
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-start justify-between gap-2 mb-2">
+                            <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600">${task.domainLabel || 'Klinikal'}</span>
+                            <div class="flex items-center space-x-1.5">
+                                ${typeBadge}
+                                <span class="text-[10px] font-mono text-slate-400">#${task.id}</span>
+                            </div>
+                        </div>
+
+                        <h3 class="font-bold text-slate-900 text-sm leading-snug mb-2">${task.name}</h3>
+
+                        <div class="space-y-2 pt-2 border-t border-slate-100">
+                            <!-- Main Person Lead Section -->
+                            <div class="bg-amber-50/70 p-2.5 rounded-xl border border-amber-200">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-amber-900 flex items-center">
+                                        <i class="fa-solid fa-crown text-amber-500 mr-1"></i>Main Person (PIC Mesyuarat):
+                                    </span>
+                                    <button onclick="openEditTaskModal(${task.id})" class="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 bg-white px-2 py-0.5 rounded border border-indigo-200 transition">
+                                        Tukar PIC
+                                    </button>
+                                </div>
+                                <div class="flex flex-wrap">${leadsBadges || '<span class="text-xs text-amber-700 italic">Belum ditetapkan</span>'}</div>
+                            </div>
+
+                            <!-- Supporting Specialists (if any) -->
+                            ${supporting.length > 0 ? `
+                            <div>
+                                <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-500 block mb-1">
+                                    <i class="fa-solid fa-users mr-1"></i>Pakar Sokongan / Pasukan:
+                                </span>
+                                <div class="flex flex-wrap">${supportingBadges}</div>
+                            </div>
+                            ` : ''}
+
+                            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-600 block mb-1">
+                                    <i class="fa-solid fa-stethoscope mr-1 text-teal-600"></i>MO / Pasukan Bertugas:
+                                </span>
+                                <p class="text-xs font-medium text-slate-700 leading-relaxed">${task.mo || '-'}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+                        <button onclick="copyTaskWhatsApp(${task.id})" class="flex-1 py-1.5 px-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold rounded-lg text-[11px] border border-emerald-200 transition flex items-center justify-center space-x-1">
+                            <i class="fa-brands fa-whatsapp text-emerald-600"></i>
+                            <span>Salin ke WhatsApp</span>
+                        </button>
+                        <button onclick="openEditTaskModal(${task.id})" title="Sunting Tugasan & PIC" class="w-8 h-8 rounded-lg text-slate-400 hover:text-teal-600 hover:bg-slate-100 transition inline-flex items-center justify-center border border-slate-200">
+                            <i class="fa-solid fa-pen text-xs"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function setQuickLookupFilter(val) {
+            const input = document.getElementById('quickLookupInput');
+            if (input) input.value = val;
+            renderQuickLookupCards(val);
+        }
+
+        function clearQuickLookupSearch() {
+            setQuickLookupFilter('');
+        }
+
+        function copyTaskWhatsApp(taskId) {
+            const task = tasksData.find(t => t.id === taskId);
+            if (!task) return;
+
+            const specialistsText = (task.specialists || []).join(', ');
+            const textToCopy = `🏥 *HTPN O&G - Info In-Charge Portfolio*\n` +
+                               `📌 *Portfolio:* ${task.name} (${task.type})\n` +
+                               `📁 *Kategori:* ${task.domainLabel || 'Umum'}\n` +
+                               `👨‍⚕️ *Pakar In-Charge:* ${specialistsText || '-'}\n` +
+                               `🩺 *MO / Pasukan:* ${task.mo || '-'}\n` +
+                               `🔗 https://ara5558.github.io/htpn-og-taskforce/`;
+
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = textToCopy;
+            tempTextArea.style.position = 'fixed';
+            tempTextArea.style.left = '-9999px';
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            try {
+                document.execCommand('copy');
+                showNotification("Disalin ke Clipboard", `Maklumat "${task.name}" telah disalin untuk WhatsApp.`);
+            } catch (err) {
+                console.error("Copy failed:", err);
+            }
+            document.body.removeChild(tempTextArea);
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'text-teal-600', 'border-teal-600', 'font-bold');
+                btn.classList.add('text-slate-500', 'border-transparent');
+            });
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-500', 'border-transparent');
+                activeBtn.classList.add('active', 'text-teal-600', 'border-teal-600', 'font-bold');
+            }
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            const target = document.getElementById(`content-${tabId}`);
+            if (target) target.classList.remove('hidden');
+
+            if (tabId === 'overview') setTimeout(initializeCharts, 50);
+            if (tabId === 'lookup') renderQuickLookupCards(document.getElementById('quickLookupInput')?.value || '');
+        }
+
+        function getSpecialistStats() {
+            return specialistsList.map(name => {
+                const assignedTasks = tasksData.filter(t => t.specialists && t.specialists.includes(name));
+                
+                let leadMajorCount = 0;
+                let supportMajorCount = 0;
+                let leadMinorCount = 0;
+                let supportMinorCount = 0;
+
+                assignedTasks.forEach(t => {
+                    const isLead = (Array.isArray(t.leads) && t.leads.includes(name)) || 
+                                   ((!t.leads || t.leads.length === 0) && t.specialists && t.specialists[0] === name);
+                    const isMajor = t.type === "Major";
+
+                    if (isMajor && isLead) leadMajorCount++;
+                    else if (isMajor && !isLead) supportMajorCount++;
+                    else if (!isMajor && isLead) leadMinorCount++;
+                    else if (!isMajor && !isLead) supportMinorCount++;
+                });
+
+                const leadCount = leadMajorCount + leadMinorCount;
+                const supportCount = supportMajorCount + supportMinorCount;
+                const majorCount = leadMajorCount + supportMajorCount;
+                const minorCount = leadMinorCount + supportMinorCount;
+
+                // Matriks Pemberat Beban Baharu:
+                // Lead Major = 4 pts
+                // Support Major = 2 pts
+                // Lead Minor = 2 pts
+                // Support Minor = 1 pt
+                const leadPoints = (leadMajorCount * 4) + (leadMinorCount * 2);
+                const supportPoints = (supportMajorCount * 2) + (supportMinorCount * 1);
+                const weightedScore = leadPoints + supportPoints;
+
+                let burdenLevel = "Sederhana (Seimbang)";
+                let burdenClass = "moderate";
+                if (weightedScore >= 45) {
+                    burdenLevel = "Kritikal (Overloaded)";
+                    burdenClass = "critical";
+                } else if (weightedScore >= 30) {
+                    burdenLevel = "Berat (Heavy Load)";
+                    burdenClass = "heavy";
+                } else if (weightedScore < 18) {
+                    burdenLevel = "Kapasiti Rendah (Underutilized)";
+                    burdenClass = "low";
+                }
+
+                return {
+                    name,
+                    totalTasks: assignedTasks.length,
+                    leadCount,
+                    supportCount,
+                    leadMajorCount,
+                    supportMajorCount,
+                    leadMinorCount,
+                    supportMinorCount,
+                    leadPoints,
+                    supportPoints,
+                    majorCount,
+                    minorCount,
+                    weightedScore,
+                    burdenLevel,
+                    burdenClass,
+                    tasks: assignedTasks
+                };
+            }).sort((a, b) => b.weightedScore - a.weightedScore);
+        }
+
+        let workloadChartInstance = null;
+        let compositionChartInstance = null;
+
+        function initializeCharts() {
+            const stats = getSpecialistStats();
+            const names = stats.map(s => s.name);
+            const leadPts = stats.map(s => s.leadPoints);
+            const supportPts = stats.map(s => s.supportPoints);
+            const leadMajor = stats.map(s => s.leadMajorCount);
+            const supportMajor = stats.map(s => s.supportMajorCount);
+            const leadMinor = stats.map(s => s.leadMinorCount);
+            const supportMinor = stats.map(s => s.supportMinorCount);
+
+            const el1 = document.getElementById('workloadChart');
+            if (el1) {
+                const ctx1 = el1.getContext('2d');
+                if (workloadChartInstance) workloadChartInstance.destroy();
+                workloadChartInstance = new Chart(ctx1, {
+                    type: 'bar',
+                    data: {
+                        labels: names,
+                        datasets: [
+                            {
+                                label: '👑 Beban Ketua (Lead Points: 4pt/2pt)',
+                                data: leadPts,
+                                backgroundColor: '#f59e0b',
+                                borderRadius: 4,
+                                stack: 'points'
+                            },
+                            {
+                                label: '👥 Beban Sokongan (Support Points: 2pt/1pt)',
+                                data: supportPts,
+                                backgroundColor: '#0d9488',
+                                borderRadius: 4,
+                                stack: 'points'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { stacked: true, ticks: { font: { size: 10 } }, grid: { display: false } },
+                            y: { stacked: true, beginAtZero: true, ticks: { stepSize: 5 } }
+                        },
+                        plugins: { 
+                            legend: { position: 'top', labels: { font: { size: 11 } } },
+                            tooltip: {
+                                callbacks: {
+                                    afterBody: function(context) {
+                                        const idx = context[0].dataIndex;
+                                        return `Jumlah Skor: ${stats[idx].weightedScore} pts (${stats[idx].burdenLevel})`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const el2 = document.getElementById('compositionChart');
+            if (el2) {
+                const ctx2 = el2.getContext('2d');
+                if (compositionChartInstance) compositionChartInstance.destroy();
+                compositionChartInstance = new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: names,
+                        datasets: [
+                            { label: '👑 Lead Major (4 pts)', data: leadMajor, backgroundColor: '#dc2626', stack: 'counts' },
+                            { label: '👥 Sokongan Major (2 pts)', data: supportMajor, backgroundColor: '#f87171', stack: 'counts' },
+                            { label: '👑 Lead Minor (2 pts)', data: leadMinor, backgroundColor: '#d97706', stack: 'counts' },
+                            { label: '👥 Sokongan Minor (1 pt)', data: supportMinor, backgroundColor: '#2dd4bf', stack: 'counts' }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { stacked: true, ticks: { font: { size: 10 } }, grid: { display: false } },
+                            y: { stacked: true, beginAtZero: true, ticks: { stepSize: 2 } }
+                        },
+                        plugins: { legend: { position: 'top', labels: { font: { size: 10 } } } }
+                    }
+                });
+            }
+        }
+
+        function renderSpecialistGrid(filterType = "all") {
+            const container = document.getElementById('specialistGrid');
+            if (!container) return;
+            const stats = getSpecialistStats();
+            container.innerHTML = "";
+
+            stats.forEach(sp => {
+                if (filterType !== "all" && sp.burdenClass !== filterType) return;
+                const initials = sp.name.replace("Dr ", "").substring(0, 2).toUpperCase();
+
+                let badgeClass = "bg-amber-100 text-amber-800 border-amber-200";
+                if (sp.burdenClass === "critical") badgeClass = "bg-rose-100 text-rose-800 border-rose-200";
+                if (sp.burdenClass === "heavy") badgeClass = "bg-orange-100 text-orange-800 border-orange-200";
+                if (sp.burdenClass === "low") badgeClass = "bg-emerald-100 text-emerald-800 border-emerald-200";
+
+                const card = document.createElement('div');
+                card.className = "bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between";
+                card.onclick = () => openSpecialistModal(sp.name);
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-11 h-11 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold text-sm">
+                                    ${initials}
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm leading-snug">${sp.name}</h4>
+                                    <p class="text-[11px] text-slate-500">Pakar Perbidanan & Sakit Puan</p>
+                                </div>
+                            </div>
+                            <span class="text-xs px-2.5 py-1 rounded-lg border font-bold ${badgeClass}">
+                                ${sp.weightedScore} pts
+                            </span>
+                        </div>
+
+                        <!-- Breakdown: Lead vs Support -->
+                        <div class="grid grid-cols-2 gap-2 my-2.5 text-center">
+                            <div class="p-2 rounded-lg bg-amber-50 border border-amber-200">
+                                <span class="text-[10px] uppercase text-amber-800 font-bold block">👑 Ketua (Lead)</span>
+                                <p class="text-sm font-extrabold text-amber-900">${sp.leadCount} tugas</p>
+                                <span class="text-[9px] text-amber-700">${sp.leadPoints} mata beban</span>
+                            </div>
+                            <div class="p-2 rounded-lg bg-teal-50 border border-teal-200">
+                                <span class="text-[10px] uppercase text-teal-800 font-bold block">👥 Sokongan (AJK)</span>
+                                <p class="text-sm font-extrabold text-teal-900">${sp.supportCount} tugas</p>
+                                <span class="text-[9px] text-teal-700">${sp.supportPoints} mata beban</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1 mt-2">
+                            <p class="text-[11px] font-semibold text-slate-700 flex justify-between">
+                                <span>Portfolio Ditugaskan:</span>
+                                <span class="text-slate-400 font-normal">${sp.totalTasks} portfolio</span>
+                            </p>
+                            <div class="flex flex-wrap gap-1 mt-1">
+                                ${sp.tasks.slice(0, 3).map(t => {
+                                    const isLead = (Array.isArray(t.leads) && t.leads.includes(sp.name)) || (!t.leads && t.specialists && t.specialists[0] === sp.name);
+                                    return `<span class="text-[10px] px-2 py-0.5 rounded ${isLead ? 'bg-amber-100 text-amber-900 font-bold border border-amber-200' : 'bg-slate-100 text-slate-700 font-medium'} truncate max-w-[190px]">${isLead ? '👑 ' : ''}${t.name}</span>`;
+                                }).join('')}
+                                ${sp.tasks.length > 3 ? `<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 font-bold">+${sp.tasks.length - 3} lagi</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span class="text-slate-500 text-[11px] font-medium">${sp.burdenLevel}</span>
+                        <span class="text-teal-600 font-semibold hover:underline flex items-center">Perincian <i class="fa-solid fa-angle-right ml-1"></i></span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function openSpecialistModal(specialistName) {
+            const stats = getSpecialistStats().find(s => s.name === specialistName);
+            if (!stats) return;
+
+            document.getElementById('modalName').textContent = stats.name;
+            document.getElementById('modalAvatar').textContent = stats.name.replace("Dr ", "").substring(0, 2).toUpperCase();
+            document.getElementById('modalTotalTasks').textContent = stats.totalTasks;
+            document.getElementById('modalMajorTasks').textContent = `${stats.leadCount} Lead / ${stats.supportCount} Sokongan`;
+            document.getElementById('modalWeightedScore').textContent = `${stats.weightedScore} pts`;
+
+            const listContainer = document.getElementById('modalTaskList');
+            if (stats.tasks.length === 0) {
+                listContainer.innerHTML = `<p class="text-xs text-slate-400 italic p-3 text-center bg-slate-50 rounded-lg">Pakar ini belum mempunyai tugasan.</p>`;
+            } else {
+                listContainer.innerHTML = stats.tasks.map(t => {
+                    const isLead = (Array.isArray(t.leads) && t.leads.includes(specialistName)) || 
+                                   ((!t.leads || t.leads.length === 0) && t.specialists && t.specialists[0] === specialistName);
+                    const isMajor = t.type === "Major";
+
+                    let pointBadge = "";
+                    if (isMajor && isLead) {
+                        pointBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300">👑 Ketua Major (+4 pts)</span>`;
+                    } else if (isMajor && !isLead) {
+                        pointBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-100 text-rose-800 border border-rose-200">👥 Sokongan Major (+2 pts)</span>`;
+                    } else if (!isMajor && isLead) {
+                        pointBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">👑 Ketua Minor (+2 pts)</span>`;
+                    } else {
+                        pointBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-700 border border-slate-200">👥 Sokongan Minor (+1 pt)</span>`;
+                    }
+
+                    return `
+                        <div class="flex items-center justify-between p-2.5 rounded-xl border ${isLead ? 'bg-amber-50/40 border-amber-200' : 'bg-slate-50 border-slate-200'}">
+                            <div class="pr-2 min-w-0">
+                                <div class="flex items-center space-x-1.5">
+                                    <span class="font-bold text-xs text-slate-900 truncate">${t.name}</span>
+                                </div>
+                                <span class="block text-[10px] text-slate-500 mt-0.5">${t.domainLabel} • MO: ${t.mo || '-'}</span>
+                            </div>
+                            <div class="shrink-0 text-right">
+                                ${pointBadge}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            document.getElementById('modalHodAdvice').textContent = hodNotes[specialistName] || "Kekalkan pemantauan audit klinikal berterusan dan pastikan agihan portfolio seimbang antara tugas Lead dan Sokongan.";
+            document.getElementById('specialistModal').classList.remove('hidden');
+        }
+
+        function closeSpecialistModal() {
+            document.getElementById('specialistModal').classList.add('hidden');
+        }
+
+        function updateTopMetrics() {
+            const total = tasksData.length;
+            const majors = tasksData.filter(t => t.type === "Major").length;
+            const minors = tasksData.filter(t => t.type === "Minor").length;
+            const qualityTasks = tasksData.filter(t => t.domain === "quality");
+            const qualityCount = qualityTasks.length;
+
+            const elTotal = document.getElementById('statTotalTasks');
+            if (elTotal) elTotal.textContent = total;
+
+            const elMajorMinor = document.getElementById('statMajorMinor');
+            if (elMajorMinor) {
+                const majorPercent = total > 0 ? Math.round((majors / total) * 100) : 0;
+                elMajorMinor.innerHTML = `<span class="text-teal-600 font-semibold">${majors} Major (${majorPercent}%)</span> • ${minors} Minor`;
+            }
+
+            const elSpec = document.getElementById('statSpecialistCount');
+            if (elSpec) elSpec.textContent = specialistsList.length;
+
+            const elQuality = document.getElementById('statQualityTasks');
+            if (elQuality) elQuality.textContent = qualityCount;
+
+            // Compute actual real-time range and average load per specialist
+            const stats = getSpecialistStats();
+            if (stats.length > 0) {
+                const totalTaskAssignments = stats.reduce((acc, sp) => acc + sp.totalTasks, 0);
+                const avgTasks = (totalTaskAssignments / stats.length).toFixed(1);
+
+                const taskCounts = stats.map(s => s.totalTasks);
+                const minTasks = Math.min(...taskCounts);
+                const maxTasks = Math.max(...taskCounts);
+
+                const elAvg = document.getElementById('statAvgLoad');
+                if (elAvg) elAvg.textContent = avgTasks;
+
+                const elRange = document.getElementById('statLoadRange');
+                if (elRange) elRange.textContent = `Julat: ${minTasks} - ${maxTasks} tugasan`;
+            }
+
+            // Synchronize the dynamic HOD insights banner & strategy
+            updateHodInsights(stats);
+        }
+
+        function updateHodInsights(stats) {
+            if (!stats || stats.length === 0) stats = getSpecialistStats();
+
+            // Sorted by weighted score descending
+            const sortedByScore = [...stats].sort((a, b) => b.weightedScore - a.weightedScore);
+            
+            // Overloaded: Score >= 35 OR top 3 with substantial workload
+            const overloaded = sortedByScore.filter(s => s.weightedScore >= 35);
+            const highLoadList = overloaded.length >= 2 ? overloaded : sortedByScore.slice(0, 3);
+
+            // Underutilized / Flexible capacity: Score < 22 OR bottom 3
+            const available = [...sortedByScore].reverse().filter(s => s.weightedScore < 25);
+            const lowLoadList = available.length >= 2 ? available.slice(0, 3) : [...sortedByScore].slice(-2).reverse();
+
+            // Format dynamic text for the main warning banner
+            const bannerBody = document.getElementById('hodBannerBody');
+            if (bannerBody) {
+                const highNames = highLoadList.map(s => `<strong>${s.name}</strong> (${s.totalTasks} tugas, ${s.weightedScore} pts, ${s.leadCount} Lead)`).join(', ');
+                const lowNames = lowLoadList.map(s => `<strong>${s.name}</strong> (${s.totalTasks} tugas, ${s.weightedScore} pts)`).join(', ');
+
+                bannerBody.innerHTML = `
+                    Pakar dengan komitmen bebanan tertinggi semasa: ${highNames}. 
+                    Sebaliknya, ${lowNames} mempunyai kapasiti luwes untuk menerima agihan portfolio mesyuarat atau sokongan audit.
+                `;
+            }
+
+            // Update Tab 6: Pelan Imbangan HOD
+            const overloadedContainer = document.getElementById('hodStrategyOverloadedList');
+            if (overloadedContainer) {
+                overloadedContainer.innerHTML = highLoadList.map(sp => `
+                    <div class="flex items-center justify-between py-1 border-b border-rose-100 last:border-none">
+                        <span class="font-bold text-slate-800">${sp.name}</span>
+                        <span class="text-rose-700 font-bold">${sp.weightedScore} pts <span class="font-normal text-slate-500">(${sp.leadCount} 👑 Lead / ${sp.totalTasks} tugas)</span></span>
+                    </div>
+                `).join('');
+            }
+
+            const capacityContainer = document.getElementById('hodStrategyCapacityList');
+            if (capacityContainer) {
+                capacityContainer.innerHTML = lowLoadList.map(sp => `
+                    <div class="flex items-center justify-between py-1 border-b border-emerald-100 last:border-none">
+                        <span class="font-bold text-slate-800">${sp.name}</span>
+                        <span class="text-emerald-700 font-bold">${sp.weightedScore} pts <span class="font-normal text-slate-500">(${sp.totalTasks} tugas)</span></span>
+                    </div>
+                `).join('');
+            }
+
+            // Dynamically scan for emergency disaster code clusters
+            const codeTasks = tasksData.filter(t => t.domain === 'emergency' || (t.name && t.name.toLowerCase().includes('code')));
+            const codeSpecialistCounts = {};
+            codeTasks.forEach(t => {
+                (t.specialists || []).forEach(s => {
+                    codeSpecialistCounts[s] = (codeSpecialistCounts[s] || 0) + 1;
+                });
+            });
+            const topCodeSpecialists = Object.entries(codeSpecialistCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 2);
+
+            const codesContainer = document.getElementById('hodStrategyCodesList');
+            if (codesContainer) {
+                if (topCodeSpecialists.length > 0) {
+                    codesContainer.innerHTML = `
+                        <p class="text-xs text-slate-700 mb-2">Terdapat <strong>${codeTasks.length} portfolio kod kecemasan/bencana</strong> aktif.</p>
+                        ${topCodeSpecialists.map(([name, count]) => `
+                            <div class="flex items-center justify-between py-1 border-b border-amber-100 last:border-none">
+                                <span class="font-bold text-slate-800">${name}</span>
+                                <span class="text-amber-800 font-semibold">${count} Kod Kecemasan</span>
+                            </div>
+                        `).join('')}
+                    `;
+                } else {
+                    codesContainer.innerHTML = `<p class="text-xs text-slate-500">Semua kod kecemasan diagihkan secara seimbang.</p>`;
+                }
+            }
+        }
+
+        function openSpecialistModal(specialistName) {
+            const stats = getSpecialistStats().find(s => s.name === specialistName);
+            if (!stats) return;
+
+            document.getElementById('modalName').textContent = stats.name;
+            document.getElementById('modalAvatar').textContent = stats.name.replace("Dr ", "").substring(0, 2).toUpperCase();
+            document.getElementById('modalTotalTasks').textContent = stats.totalTasks;
+            document.getElementById('modalMajorTasks').textContent = `${stats.leadCount} Lead / ${stats.supportCount} Sokongan`;
+            document.getElementById('modalWeightedScore').textContent = `${stats.weightedScore} pts`;
+
+            const listContainer = document.getElementById('modalTaskList');
+            if (stats.tasks.length === 0) {
+                listContainer.innerHTML = `<p class="text-xs text-slate-400 italic p-3 text-center bg-slate-50 rounded-lg">Pakar ini belum mempunyai tugasan.</p>`;
+            } else {
+                listContainer.innerHTML = stats.tasks.map(t => {
+                    const isLead = (Array.isArray(t.leads) && t.leads.includes(specialistName)) || 
+                                   ((!t.leads || t.leads.length === 0) && t.specialists && t.specialists[0] === specialistName);
+                    const isMajor = t.type === "Major";
+
+                    let pointBadge = "";
+                    if (isMajor && isLead) {
+                        pointBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300">👑 Ketua Major (+4 pts)</span>`;
+                    } else if (isMajor && !isLead) {
+                        pointBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-100 text-rose-800 border border-rose-200">👥 Sokongan Major (+2 pts)</span>`;
+                    } else if (!isMajor && isLead) {
+                        pointBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">👑 Ketua Minor (+2 pts)</span>`;
+                    } else {
+                        pointBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-700 border border-slate-200">👥 Sokongan Minor (+1 pt)</span>`;
+                    }
+
+                    return `
+                        <div class="flex items-center justify-between p-2.5 rounded-xl border ${isLead ? 'bg-amber-50/40 border-amber-200' : 'bg-slate-50 border-slate-200'}">
+                            <div class="pr-2 min-w-0">
+                                <div class="flex items-center space-x-1.5">
+                                    <span class="font-bold text-xs text-slate-900 truncate">${t.name}</span>
+                                </div>
+                                <span class="block text-[10px] text-slate-500 mt-0.5">${t.domainLabel} • MO: ${t.mo || '-'}</span>
+                            </div>
+                            <div class="shrink-0 text-right">
+                                ${pointBadge}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Dynamic HOD advice tailored to current real-time numbers
+            let dynamicAdvice = "";
+            if (stats.weightedScore >= 45) {
+                dynamicAdvice = `Beban kerja kritikal (${stats.weightedScore} pts; ${stats.leadCount} peranan Lead). Berisiko tinggi mengalami keletihan mesyuarat. Cadangan HOD: Pindahkan sekurang-kurangnya 2-3 portfolio minor kepada pakar berkapasiti luwes.`;
+            } else if (stats.weightedScore >= 30) {
+                dynamicAdvice = `Beban kerja aktif dan stabil (${stats.weightedScore} pts). Memegang ${stats.leadMajorCount} Lead Major. Cadangan HOD: Kekalkan tumpuan pada portfolio klinikal utama dan audit berkaitan.`;
+            } else if (stats.weightedScore < 20) {
+                dynamicAdvice = `Mempunyai kapasiti masa yang sangat luwes (${stats.totalTasks} portfolio, skor ${stats.weightedScore} pts). Cadangan HOD: Boleh mengambil alih 2 portfolio sokongan kualiti / audit / pentadbiran jabatan.`;
+            } else {
+                dynamicAdvice = `Beban tugas seimbang (${stats.weightedScore} pts). Agihan antara tugas memimpin (👑 ${stats.leadCount}) dan sokongan (👥 ${stats.supportCount}) adalah sihat.`;
+            }
+
+            document.getElementById('modalHodAdvice').textContent = dynamicAdvice;
+            document.getElementById('specialistModal').classList.remove('hidden');
+        }
+
+        function showNotification(title, message, isSuccess = true) {
+            const toast = document.getElementById('customToast');
+            if (!toast) return;
+            document.getElementById('toastTitle').textContent = title;
+            document.getElementById('toastMessage').textContent = message;
+            document.getElementById('toastIcon').className = isSuccess ? "fa-solid fa-circle-check text-emerald-400 text-base mt-0.5" : "fa-solid fa-triangle-exclamation text-amber-400 text-base mt-0.5";
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-24', 'opacity-0'), 4000);
+        }
 
         function extractAllMosWithCounts() {
             const moMap = {};
@@ -1408,6 +1793,7 @@
 
         function renderRosterSpecialistTable() {
             const tbody = document.getElementById('rosterSpecialistTableBody');
+            if (!tbody) return;
             tbody.innerHTML = "";
             const stats = getSpecialistStats();
 
@@ -1423,7 +1809,7 @@
                     <td class="p-3 text-center font-semibold text-slate-700">${sp.totalTasks} tugas</td>
                     <td class="p-3 text-center font-bold text-indigo-600">${sp.weightedScore} pts</td>
                     <td class="p-3 text-center">
-                        <button onclick="promptDeleteSpecialist('${sp.name}')" title="Keluarkan Pakar ini" class="px-2.5 py-1 text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-lg text-xs font-semibold transition">
+                        <button onclick="handleDeleteSpecialistQuick('${sp.name}')" title="Keluarkan Pakar ini" class="px-2.5 py-1 text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-lg text-xs font-semibold transition">
                             <i class="fa-solid fa-trash-can mr-1"></i> Padam
                         </button>
                     </td>
@@ -1434,9 +1820,11 @@
 
         function renderRosterMoTable() {
             const tbody = document.getElementById('rosterMoTableBody');
+            if (!tbody) return;
             tbody.innerHTML = "";
             const mos = extractAllMosWithCounts();
-            document.getElementById('detectedMoCount').textContent = `${mos.length} Kakitangan Dikesan`;
+            const badge = document.getElementById('detectedMoCount');
+            if (badge) badge.textContent = `${mos.length} Kakitangan Dikesan`;
 
             if (mos.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">Tiada nama MO dikesan.</td></tr>`;
@@ -1455,7 +1843,7 @@
                         </span>
                     </td>
                     <td class="p-3 text-center">
-                        <button onclick="promptDeleteMo('${item.name}')" title="Padam nama MO ini" class="px-2 py-1 text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 rounded-lg text-xs transition">
+                        <button onclick="handleDeleteMoQuick('${item.name}')" title="Padam nama MO ini" class="px-2 py-1 text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 rounded-lg text-xs transition">
                             <i class="fa-solid fa-user-xmark mr-1"></i> Padam
                         </button>
                     </td>
@@ -1483,74 +1871,34 @@
             renderSpecialistGrid();
             initializeCharts();
             updateTopMetrics();
-            showNotification("Pakar Ditambah", `${name} telah berjaya didaftarkan ke dalam direktori O&G.`);
+            showNotification("Pakar Ditambah", `${name} telah berjaya didaftarkan.`);
         }
 
-        let pendingDeleteSpecialistName = null;
-
-        function promptDeleteSpecialist(specialistName) {
-            pendingDeleteSpecialistName = specialistName;
-            const assignedTasks = tasksData.filter(t => t.specialists && t.specialists.includes(specialistName));
-            document.getElementById('deleteSpecialistNameDisplay').textContent = specialistName;
-            document.getElementById('deleteSpecialistTaskCountDisplay').textContent = assignedTasks.length;
-
-            const targetSelect = document.getElementById('reassignTargetSpecialistSelect');
-            targetSelect.innerHTML = "";
-            specialistsList.filter(s => s !== specialistName).forEach(s => {
-                const opt = document.createElement('option');
-                opt.value = s;
-                opt.textContent = s;
-                targetSelect.appendChild(opt);
-            });
-
-            document.getElementById('deleteSpecialistModal').classList.remove('hidden');
-        }
-
-        function closeDeleteSpecialistModal() {
-            pendingDeleteSpecialistName = null;
-            document.getElementById('deleteSpecialistModal').classList.add('hidden');
-        }
-
-        async function executeDeleteSpecialist() {
-            if (!pendingDeleteSpecialistName) return;
-            const specialistToRemove = pendingDeleteSpecialistName;
-            const action = document.querySelector('input[name="specialistTaskAction"]:checked').value;
-            const targetReplacement = document.getElementById('reassignTargetSpecialistSelect').value;
-
+        function handleDeleteSpecialistQuick(name) {
             tasksData.forEach(task => {
-                if (task.specialists && task.specialists.includes(specialistToRemove)) {
-                    if (action === 'reassign' && targetReplacement) {
-                        task.specialists = task.specialists.filter(s => s !== specialistToRemove);
-                        if (!task.specialists.includes(targetReplacement)) task.specialists.push(targetReplacement);
-                    } else {
-                        task.specialists = task.specialists.filter(s => s !== specialistToRemove);
-                        if (task.specialists.length === 0) task.specialists = ["Belum Ditugaskan"];
-                    }
+                if (task.specialists && task.specialists.includes(name)) {
+                    task.specialists = task.specialists.filter(s => s !== name);
+                    if (task.specialists.length === 0) task.specialists = ["Belum Ditugaskan"];
                     if (window.cloudSaveTask) window.cloudSaveTask(task);
                 }
             });
-
-            specialistsList = specialistsList.filter(s => s !== specialistToRemove);
+            specialistsList = specialistsList.filter(s => s !== name);
             localStorage.setItem('htpn_og_tasks_v2', JSON.stringify(tasksData));
-
             refreshSpecialistsList();
             populateSpecialistFilter();
-            filterTasksTable();
             renderRosterSpecialistTable();
             renderSpecialistGrid();
             initializeCharts();
             updateTopMetrics();
-
-            closeDeleteSpecialistModal();
-            closeSpecialistModal();
-            showNotification("Pakar Dikeluarkan", `${specialistToRemove} telah dikeluarkan daripada direktori dan peranan telah diselaraskan.`);
+            renderQuickLookupCards(document.getElementById('quickLookupInput')?.value || '');
+            showNotification("Pakar Dipadam", `${name} telah dikeluarkan.`);
         }
 
         function handleBatchReplaceMo() {
             const oldName = document.getElementById('replaceOldMoInput').value.trim();
             const newName = document.getElementById('replaceNewMoInput').value.trim();
             if (!oldName || !newName) {
-                showNotification("Perhatian", "Sila masukkan kedua-dua nama MO lama dan MO baharu.", false);
+                showNotification("Perhatian", "Sila masukkan nama MO lama dan MO baharu.", false);
                 return;
             }
 
@@ -1566,37 +1914,21 @@
             });
 
             if (modifiedCount === 0) {
-                showNotification("Tiada Perubahan", `Nama "${oldName}" tidak ditemui dalam mana-mana tugasan.`, false);
+                showNotification("Tiada Perubahan", `Nama "${oldName}" tidak ditemui.`, false);
                 return;
             }
 
             localStorage.setItem('htpn_og_tasks_v2', JSON.stringify(tasksData));
             document.getElementById('replaceOldMoInput').value = "";
             document.getElementById('replaceNewMoInput').value = "";
-
             renderRosterMoTable();
             filterTasksTable();
-            showNotification("Handover Selesai", `Berjaya menggantikan "${oldName}" kepada "${newName}" dalam ${modifiedCount} portfolio.`);
+            renderQuickLookupCards(document.getElementById('quickLookupInput')?.value || '');
+            showNotification("Handover Selesai", `Berjaya menggantikan "${oldName}" kepada "${newName}" dalam ${modifiedCount} tugasan.`);
         }
 
-        let pendingDeleteMoName = null;
-
-        function promptDeleteMo(moName) {
-            pendingDeleteMoName = moName;
-            document.getElementById('deleteMoNameDisplay').textContent = moName;
-            document.getElementById('deleteMoModal').classList.remove('hidden');
-        }
-
-        function closeDeleteMoModal() {
-            pendingDeleteMoName = null;
-            document.getElementById('deleteMoModal').classList.add('hidden');
-        }
-
-        function executeDeleteMo() {
-            if (!pendingDeleteMoName) return;
-            const moName = pendingDeleteMoName;
+        function handleDeleteMoQuick(moName) {
             const regex = new RegExp(`\\b${moName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'gi');
-
             tasksData.forEach(task => {
                 if (task.mo && regex.test(task.mo)) {
                     task.mo = task.mo.replace(regex, '').replace(/\/\s*\//g, '/').replace(/^\s*[\/\,\;]\s*/, '').replace(/\s*[\/\,\;]\s*$/, '').trim();
@@ -1604,482 +1936,15 @@
                     if (window.cloudSaveTask) window.cloudSaveTask(task);
                 }
             });
-
             localStorage.setItem('htpn_og_tasks_v2', JSON.stringify(tasksData));
             renderRosterMoTable();
             filterTasksTable();
-            closeDeleteMoModal();
-            showNotification("MO Dikeluarkan", `Nama ${moName} telah dipadamkan daripada tugasan.`);
-        }
-
-        function getSpecialistStats() {
-            return specialistsList.map(name => {
-                const assignedTasks = tasksData.filter(t => t.specialists && t.specialists.includes(name));
-                const majorCount = assignedTasks.filter(t => t.type === "Major").length;
-                const minorCount = assignedTasks.filter(t => t.type === "Minor").length;
-                const weightedScore = (majorCount * 3) + (minorCount * 1);
-                
-                let burdenLevel = "Sederhana";
-                let burdenClass = "moderate";
-                if (weightedScore >= 40) {
-                    burdenLevel = "Kritikal (Overloaded)";
-                    burdenClass = "critical";
-                } else if (weightedScore >= 30) {
-                    burdenLevel = "Berat (Heavy)";
-                    burdenClass = "heavy";
-                } else if (weightedScore < 20) {
-                    burdenLevel = "Kapasiti Rendah (Underutilized)";
-                    burdenClass = "low";
-                }
-
-                return {
-                    name,
-                    totalTasks: assignedTasks.length,
-                    majorCount,
-                    minorCount,
-                    weightedScore,
-                    burdenLevel,
-                    burdenClass,
-                    tasks: assignedTasks
-                };
-            }).sort((a, b) => b.weightedScore - a.weightedScore);
-        }
-
-        let workloadChartInstance = null;
-        let compositionChartInstance = null;
-
-        function initializeCharts() {
-            const stats = getSpecialistStats();
-            const names = stats.map(s => s.name);
-            const weightedScores = stats.map(s => s.weightedScore);
-            const totalTasks = stats.map(s => s.totalTasks);
-            const majors = stats.map(s => s.majorCount);
-            const minors = stats.map(s => s.minorCount);
-
-            const ctx1 = document.getElementById('workloadChart').getContext('2d');
-            if (workloadChartInstance) workloadChartInstance.destroy();
-            workloadChartInstance = new Chart(ctx1, {
-                type: 'bar',
-                data: {
-                    labels: names,
-                    datasets: [
-                        {
-                            label: 'Skor Beban Tertimbang (Major=3, Minor=1)',
-                            data: weightedScores,
-                            backgroundColor: stats.map(s => s.weightedScore >= 40 ? 'rgba(225, 29, 72, 0.85)' : (s.weightedScore >= 30 ? 'rgba(234, 88, 12, 0.8)' : 'rgba(20, 184, 166, 0.75)')),
-                            borderRadius: 6,
-                            order: 1
-                        },
-                        {
-                            label: 'Jumlah Bilangan Tugasan',
-                            data: totalTasks,
-                            type: 'line',
-                            borderColor: '#3b82f6',
-                            backgroundColor: '#3b82f6',
-                            borderWidth: 2,
-                            pointRadius: 4,
-                            tension: 0.2,
-                            order: 0
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { ticks: { font: { size: 10 } }, grid: { display: false } },
-                        y: { beginAtZero: true, ticks: { stepSize: 10 } }
-                    },
-                    plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } }
-                }
-            });
-
-            const ctx2 = document.getElementById('compositionChart').getContext('2d');
-            if (compositionChartInstance) compositionChartInstance.destroy();
-            compositionChartInstance = new Chart(ctx2, {
-                type: 'bar',
-                data: {
-                    labels: names,
-                    datasets: [
-                        { label: 'Tugasan Major', data: majors, backgroundColor: '#f43f5e', borderRadius: 4 },
-                        { label: 'Tugasan Minor', data: minors, backgroundColor: '#2dd4bf', borderRadius: 4 }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { stacked: true, ticks: { font: { size: 10 } }, grid: { display: false } },
-                        y: { stacked: true, beginAtZero: true, ticks: { stepSize: 5 } }
-                    },
-                    plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } }
-                }
-            });
-        }
-
-        function renderSpecialistGrid(filterType = "all") {
-            const container = document.getElementById('specialistGrid');
-            const stats = getSpecialistStats();
-            container.innerHTML = "";
-
-            stats.forEach(sp => {
-                if (filterType !== "all" && sp.burdenClass !== filterType) return;
-                const initials = sp.name.replace("Dr ", "").substring(0, 2).toUpperCase();
-
-                let badgeClass = "bg-amber-100 text-amber-800 border-amber-200";
-                if (sp.burdenClass === "critical") badgeClass = "bg-rose-100 text-rose-800 border-rose-200";
-                if (sp.burdenClass === "heavy") badgeClass = "bg-orange-100 text-orange-800 border-orange-200";
-                if (sp.burdenClass === "low") badgeClass = "bg-emerald-100 text-emerald-800 border-emerald-200";
-
-                const card = document.createElement('div');
-                card.className = "bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between";
-                card.onclick = () => openSpecialistModal(sp.name);
-
-                card.innerHTML = `
-                    <div>
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-11 h-11 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold text-sm">
-                                    ${initials}
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-slate-900 text-sm leading-snug">${sp.name}</h4>
-                                    <p class="text-[11px] text-slate-500">Pakar Perbidanan & Sakit Puan</p>
-                                </div>
-                            </div>
-                            <span class="text-xs px-2 py-1 rounded-lg border font-bold ${badgeClass}">
-                                ${sp.weightedScore} pts
-                            </span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2 my-3 text-center">
-                            <div class="p-2 rounded-lg bg-rose-50 border border-rose-100">
-                                <span class="text-[10px] uppercase text-rose-700 font-semibold">Tugas Major</span>
-                                <p class="text-base font-extrabold text-rose-600">${sp.majorCount}</p>
-                            </div>
-                            <div class="p-2 rounded-lg bg-teal-50 border border-teal-100">
-                                <span class="text-[10px] uppercase text-teal-700 font-semibold">Tugas Minor</span>
-                                <p class="text-base font-extrabold text-teal-600">${sp.minorCount}</p>
-                            </div>
-                        </div>
-                        <div class="space-y-1 mt-2">
-                            <p class="text-[11px] font-semibold text-slate-700 flex justify-between">
-                                <span>Portfolio Utama:</span>
-                                <span class="text-slate-400 font-normal">${sp.totalTasks} tugas</span>
-                            </p>
-                            <div class="flex flex-wrap gap-1 mt-1">
-                                ${sp.tasks.slice(0, 3).map(t => `<span class="text-[10px] px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-medium truncate max-w-[190px]">${t.name}</span>`).join('')}
-                                ${sp.tasks.length > 3 ? `<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 font-bold">+${sp.tasks.length - 3} lagi</span>` : ''}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                        <span class="text-slate-500 text-[11px]">${sp.burdenLevel}</span>
-                        <span class="text-teal-600 font-semibold hover:underline flex items-center">Perincian <i class="fa-solid fa-angle-right ml-1"></i></span>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function filterSpecialistCards() {
-            renderSpecialistGrid(document.getElementById('burdenFilter').value);
-        }
-
-        function renderTasksTable(data = tasksData) {
-            const tbody = document.getElementById('taskTableBody');
-            tbody.innerHTML = "";
-
-            if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-400 text-xs">Tiada rekod tugasan ditemui.</td></tr>`;
-                document.getElementById('taskCountDisplay').textContent = "0 tugasan ditemui";
-                return;
-            }
-
-            data.forEach(t => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
-
-                const typeBadge = t.type === "Major" 
-                    ? `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-700"><i class="fa-solid fa-star text-[9px] mr-1"></i>Major</span>`
-                    : `<span class="px-2 py-0.5 rounded-full text-[11px] font-medium bg-teal-100 text-teal-700">Minor</span>`;
-
-                const specialistPills = (t.specialists || []).map(s => `
-                    <span class="inline-block px-2 py-0.5 bg-slate-100 text-slate-800 rounded font-medium text-[11px] mr-1 mb-1">${s}</span>
-                `).join('');
-
-                tr.innerHTML = `
-                    <td class="py-2.5 px-3 text-center text-slate-400 font-semibold">${t.id}</td>
-                    <td class="py-2.5 px-4 font-semibold text-slate-900">${t.name}</td>
-                    <td class="py-2.5 px-3 text-center">${typeBadge}</td>
-                    <td class="py-2.5 px-3"><span class="text-[11px] text-slate-600 bg-slate-50 px-2 py-0.5 rounded border border-slate-200">${t.domainLabel}</span></td>
-                    <td class="py-2.5 px-4 max-w-xs">${specialistPills}</td>
-                    <td class="py-2.5 px-4 text-slate-600 text-[11px] max-w-xs">${t.mo || '-'}</td>
-                    <td class="py-2.5 px-3 text-center whitespace-nowrap">
-                        <button onclick="openEditTaskModal(${t.id})" title="Sunting Tugasan" class="w-7 h-7 rounded-lg text-slate-500 hover:text-teal-600 hover:bg-teal-50 transition inline-flex items-center justify-center mr-1">
-                            <i class="fa-solid fa-pen-to-square text-xs"></i>
-                        </button>
-                        <button onclick="promptDeleteTask(${t.id})" title="Padam Tugasan" class="w-7 h-7 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition inline-flex items-center justify-center">
-                            <i class="fa-solid fa-trash-can text-xs"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            document.getElementById('taskCountDisplay').textContent = `Memaparkan ${data.length} daripada ${tasksData.length} tugasan O&G`;
-        }
-
-        function filterTasksTable() {
-            const query = document.getElementById('taskSearchInput').value.toLowerCase().trim();
-            const typeVal = document.getElementById('typeFilter').value;
-            const domainVal = document.getElementById('domainFilter').value;
-            const specialistVal = document.getElementById('specialistFilter').value;
-
-            const filtered = tasksData.filter(t => {
-                const matchSearch = t.name.toLowerCase().includes(query) || 
-                                    (t.specialists && t.specialists.some(s => s.toLowerCase().includes(query))) ||
-                                    (t.mo && t.mo.toLowerCase().includes(query));
-                const matchType = (typeVal === "all") || (t.type.toLowerCase() === typeVal);
-                const matchDomain = (domainVal === "all") || (t.domain === domainVal);
-                const matchSpecialist = (specialistVal === "all") || (t.specialists && t.specialists.includes(specialistVal));
-                return matchSearch && matchType && matchDomain && matchSpecialist;
-            });
-            renderTasksTable(filtered);
-        }
-
-        function populateSpecialistFilter() {
-            const select = document.getElementById('specialistFilter');
-            select.innerHTML = '<option value="all">Semua Pakar</option>';
-            specialistsList.forEach(sp => {
-                const opt = document.createElement('option');
-                opt.value = sp;
-                opt.textContent = sp;
-                select.appendChild(opt);
-            });
-        }
-
-        function renderSpecialistCheckboxes(selectedList = []) {
-            const container = document.getElementById('specialistCheckboxContainer');
-            container.innerHTML = "";
-            specialistsList.forEach(sp => {
-                const isChecked = selectedList.includes(sp) ? "checked" : "";
-                const div = document.createElement('label');
-                div.className = "flex items-center space-x-2 text-xs text-slate-700 bg-white p-1.5 rounded-lg border border-slate-200 cursor-pointer hover:border-teal-400";
-                div.innerHTML = `
-                    <input type="checkbox" name="specialistChoice" value="${sp}" ${isChecked} class="rounded text-teal-600 focus:ring-teal-500">
-                    <span class="truncate">${sp}</span>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function openAddTaskModal() {
-            document.getElementById('taskFormId').value = "";
-            document.getElementById('taskFormName').value = "";
-            document.getElementById('taskFormType').value = "Major";
-            document.getElementById('taskFormDomain').value = "quality";
-            document.getElementById('taskFormMO').value = "";
-            document.getElementById('taskModalTitle').textContent = "Tambah Tugasan Baharu";
-            document.getElementById('taskFormSubmitBtnText').textContent = "Simpan Tugasan";
-            renderSpecialistCheckboxes([]);
-            document.getElementById('taskModal').classList.remove('hidden');
-        }
-
-        function openEditTaskModal(taskId) {
-            const task = tasksData.find(t => t.id === taskId);
-            if (!task) return;
-            document.getElementById('taskFormId').value = task.id;
-            document.getElementById('taskFormName').value = task.name;
-            document.getElementById('taskFormType').value = task.type;
-            document.getElementById('taskFormDomain').value = task.domain;
-            document.getElementById('taskFormMO').value = task.mo || "";
-            document.getElementById('taskModalTitle').textContent = `Sunting Tugasan #${task.id}`;
-            document.getElementById('taskFormSubmitBtnText').textContent = "Kemaskini Tugasan";
-            renderSpecialistCheckboxes(task.specialists || []);
-            document.getElementById('taskModal').classList.remove('hidden');
-        }
-
-        function closeTaskModal() {
-            document.getElementById('taskModal').classList.add('hidden');
-        }
-
-        function handleTaskFormSubmit(e) {
-            e.preventDefault();
-            const idVal = document.getElementById('taskFormId').value;
-            const name = document.getElementById('taskFormName').value.trim();
-            const type = document.getElementById('taskFormType').value;
-            const domain = document.getElementById('taskFormDomain').value;
-            const mo = document.getElementById('taskFormMO').value.trim();
-
-            const domainLabels = {
-                "quality": "Kualiti & Audit", "clinical": "Klinikal & Prosedur",
-                "training": "Latihan & Akademik", "emergency": "Kecemasan & Kod",
-                "governance": "Governan & Polisi", "admin": "Pentadbiran & Khidmat"
-            };
-
-            const selectedSpecialists = Array.from(document.querySelectorAll('input[name="specialistChoice"]:checked')).map(cb => cb.value);
-            if (selectedSpecialists.length === 0) {
-                showNotification("Perhatian", "Sila pilih sekurang-kurangnya 1 pakar bertanggungjawab.", false);
-                return;
-            }
-
-            let taskToSave = null;
-            if (idVal) {
-                const targetTask = tasksData.find(t => t.id === parseInt(idVal));
-                if (targetTask) {
-                    targetTask.name = name;
-                    targetTask.type = type;
-                    targetTask.domain = domain;
-                    targetTask.domainLabel = domainLabels[domain] || "Klinikal & Prosedur";
-                    targetTask.specialists = selectedSpecialists;
-                    targetTask.mo = mo;
-                    taskToSave = targetTask;
-                }
-            } else {
-                const nextId = tasksData.length > 0 ? Math.max(...tasksData.map(t => t.id)) + 1 : 1;
-                const newTask = {
-                    id: nextId, name, type, domain,
-                    domainLabel: domainLabels[domain] || "Klinikal & Prosedur",
-                    specialists: selectedSpecialists, mo
-                };
-                tasksData.push(newTask);
-                taskToSave = newTask;
-            }
-
-            if (taskToSave && window.cloudSaveTask) window.cloudSaveTask(taskToSave);
-            localStorage.setItem('htpn_og_tasks_v2', JSON.stringify(tasksData));
-
-            refreshSpecialistsList();
-            populateSpecialistFilter();
-            filterTasksTable();
-            renderSpecialistGrid();
-            initializeCharts();
-            updateTopMetrics();
-            closeTaskModal();
-            showNotification("Berjaya", `Tugasan "${name}" telah disimpan.`);
-        }
-
-        let taskPendingDeleteId = null;
-
-        function promptDeleteTask(taskId) {
-            const task = tasksData.find(t => t.id === taskId);
-            if (!task) return;
-            taskPendingDeleteId = taskId;
-            document.getElementById('deleteTaskNameDisplay').textContent = `"${task.name}" (#${task.id})`;
-            document.getElementById('deleteConfirmModal').classList.remove('hidden');
-        }
-
-        function closeDeleteConfirmModal() {
-            taskPendingDeleteId = null;
-            document.getElementById('deleteConfirmModal').classList.add('hidden');
-        }
-
-        function executeDeleteTask() {
-            if (!taskPendingDeleteId) return;
-            const deletedId = taskPendingDeleteId;
-            tasksData = tasksData.filter(t => t.id !== deletedId);
-            if (window.cloudDeleteTask) window.cloudDeleteTask(deletedId);
-            localStorage.setItem('htpn_og_tasks_v2', JSON.stringify(tasksData));
-
-            refreshSpecialistsList();
-            populateSpecialistFilter();
-            filterTasksTable();
-            renderSpecialistGrid();
-            initializeCharts();
-            updateTopMetrics();
-            closeDeleteConfirmModal();
-            showNotification("Dipadam", "Portfolio telah dipadamkan daripada sistem.");
-        }
-
-        let currentModalSpecialistName = null;
-
-        function openSpecialistModal(specialistName) {
-            currentModalSpecialistName = specialistName;
-            const stats = getSpecialistStats().find(s => s.name === specialistName);
-            if (!stats) return;
-
-            document.getElementById('modalName').textContent = stats.name;
-            document.getElementById('modalAvatar').textContent = stats.name.replace("Dr ", "").substring(0, 2).toUpperCase();
-            document.getElementById('modalTotalTasks').textContent = stats.totalTasks;
-            document.getElementById('modalMajorTasks').textContent = stats.majorCount;
-            document.getElementById('modalWeightedScore').textContent = `${stats.weightedScore} pts`;
-
-            const listContainer = document.getElementById('modalTaskList');
-            if (stats.tasks.length === 0) {
-                listContainer.innerHTML = `<p class="text-xs text-slate-400 italic p-3 text-center bg-slate-50 rounded-lg">Pakar ini belum mempunyai tugasan.</p>`;
-            } else {
-                listContainer.innerHTML = stats.tasks.map(t => `
-                    <div class="flex items-center justify-between p-2 rounded-lg border ${t.type === 'Major' ? 'bg-rose-50/50 border-rose-200' : 'bg-slate-50 border-slate-200'}">
-                        <div>
-                            <span class="font-semibold text-xs text-slate-900">${t.name}</span>
-                            <span class="block text-[10px] text-slate-500">${t.domainLabel} • MO: ${t.mo || '-'}</span>
-                        </div>
-                        <span class="text-[10px] font-bold px-2 py-0.5 rounded ${t.type === 'Major' ? 'bg-rose-200 text-rose-800' : 'bg-slate-200 text-slate-700'}">${t.type}</span>
-                    </div>
-                `).join('');
-            }
-
-            document.getElementById('modalHodAdvice').textContent = hodNotes[specialistName] || "Kekalkan pemantauan audit klinikal berterusan dan pastikan mesyuarat berkala diadakan.";
-            document.getElementById('specialistModal').classList.remove('hidden');
-        }
-
-        function promptDeleteSpecialistFromDetail() {
-            if (currentModalSpecialistName) promptDeleteSpecialist(currentModalSpecialistName);
-        }
-
-        function closeSpecialistModal() {
-            currentModalSpecialistName = null;
-            document.getElementById('specialistModal').classList.add('hidden');
-        }
-
-        function updateTopMetrics() {
-            const total = tasksData.length;
-            const majors = tasksData.filter(t => t.type === "Major").length;
-            const minors = tasksData.filter(t => t.type === "Minor").length;
-            const qualityCount = tasksData.filter(t => t.domain === "quality").length;
-
-            document.getElementById('statTotalTasks').innerHTML = `${total} <span class="text-xs font-normal text-slate-500">Item</span>`;
-            document.getElementById('statMajorMinor').innerHTML = `<span class="text-teal-600 font-semibold">${majors} Major</span> • ${minors} Minor`;
-            document.getElementById('statSpecialistCount').innerHTML = `${specialistsList.length} <span class="text-xs font-normal text-slate-500">Orang</span>`;
-            document.getElementById('statQualityTasks').innerHTML = `${qualityCount} <span class="text-xs font-normal text-slate-500">Item Kritikal</span>`;
-
-            const domainQualityEl = document.getElementById('domainCountQuality');
-            if (domainQualityEl) domainQualityEl.innerHTML = `${qualityCount} <span class="text-xs font-normal">tugas</span>`;
-        }
-
-        function showNotification(title, message, isSuccess = true) {
-            const toast = document.getElementById('customToast');
-            document.getElementById('toastTitle').textContent = title;
-            document.getElementById('toastMessage').textContent = message;
-            document.getElementById('toastIcon').className = isSuccess ? "fa-solid fa-circle-check text-emerald-400 text-base mt-0.5" : "fa-solid fa-triangle-exclamation text-amber-400 text-base mt-0.5";
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 4000);
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active', 'text-teal-600', 'border-teal-600', 'font-semibold');
-                btn.classList.add('text-slate-500', 'border-transparent');
-            });
-            const activeBtn = document.getElementById(`tab-${tabId}`);
-            if (activeBtn) {
-                activeBtn.classList.remove('text-slate-500', 'border-transparent');
-                activeBtn.classList.add('active', 'text-teal-600', 'border-teal-600', 'font-semibold');
-            }
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-            const target = document.getElementById(`content-${tabId}`);
-            if (target) target.classList.remove('hidden');
-            if (tabId === 'overview') setTimeout(initializeCharts, 50);
+            renderQuickLookupCards(document.getElementById('quickLookupInput')?.value || '');
+            showNotification("MO Dikeluarkan", `Nama ${moName} telah dipadamkan.`);
         }
 
         function openUploadModal() { document.getElementById('uploadModal').classList.remove('hidden'); }
         function closeUploadModal() { document.getElementById('uploadModal').classList.add('hidden'); }
-        function handleDragOver(e) { e.preventDefault(); }
-        function handleDragLeave(e) { e.preventDefault(); }
-        function handleDrop(e) {
-            e.preventDefault();
-            if (e.dataTransfer.files.length > 0) processUploadedFile(e.dataTransfer.files[0]);
-        }
         function handleFileSelect(e) {
             if (e.target.files.length > 0) processUploadedFile(e.target.files[0]);
         }
@@ -2099,11 +1964,12 @@
                     renderSpecialistGrid();
                     initializeCharts();
                     updateTopMetrics();
+                    renderQuickLookupCards();
                     closeUploadModal();
-                    showNotification("Data Dimuatkan", `Berjaya memuatkan ${tasksData.length} portfolio ke pangkalan data awan.`);
+                    showNotification("Data Dimuatkan", `Berjaya memuatkan ${tasksData.length} portfolio.`);
                 }
             } else {
-                showNotification("Format Diterima", "Fail dokumen diproses.", true);
+                showNotification("Format Diterima", "Fail dokumen telah dibaca.", true);
             }
         }
 
@@ -2117,6 +1983,7 @@
             renderSpecialistGrid();
             initializeCharts();
             updateTopMetrics();
+            renderQuickLookupCards();
             showNotification("Data Direset", "Jadual tugas O&G telah kembali kepada data asal Julai 2026.");
         }
 
@@ -2130,23 +1997,325 @@
             dl.remove();
         }
 
+        function populateSpecialistFilter() {
+            const filterSelect = document.getElementById('specialistFilter');
+            if (!filterSelect) return;
+            const currentVal = filterSelect.value;
+            filterSelect.innerHTML = `<option value="all">Semua Pakar</option>`;
+            specialistsList.forEach(sp => {
+                const opt = document.createElement('option');
+                opt.value = sp;
+                opt.textContent = sp;
+                filterSelect.appendChild(opt);
+            });
+            filterSelect.value = currentVal || 'all';
+        }
+
+        function filterTasksTable() {
+            const searchVal = document.getElementById('taskSearchInput')?.value || '';
+            const typeVal = document.getElementById('typeFilter')?.value || 'all';
+            const specVal = document.getElementById('specialistFilter')?.value || 'all';
+            renderTasksTable(searchVal, typeVal, specVal);
+        }
+
+        function renderTasksTable(searchQuery = '', typeFilter = 'all', specFilter = 'all') {
+            const tbody = document.getElementById('taskTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const q = searchQuery.toLowerCase().trim();
+            const filtered = tasksData.filter(t => {
+                const matchSearch = !q || 
+                    (t.name || '').toLowerCase().includes(q) || 
+                    (t.mo || '').toLowerCase().includes(q) ||
+                    (t.specialists || []).some(s => s.toLowerCase().includes(q));
+
+                const matchType = typeFilter === 'all' || 
+                    (typeFilter === 'major' && t.type === 'Major') ||
+                    (typeFilter === 'minor' && t.type === 'Minor');
+
+                const matchSpec = specFilter === 'all' || 
+                    (t.specialists || []).includes(specFilter);
+
+                return matchSearch && matchType && matchSpec;
+            });
+
+            const countDisplay = document.getElementById('taskCountDisplay');
+            if (countDisplay) {
+                countDisplay.textContent = `Memaparkan ${filtered.length} daripada ${tasksData.length} tugasan`;
+            }
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-400">Tiada tugasan ditemui.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(task => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition border-b border-slate-100 text-xs";
+
+                const isMajor = task.type === 'Major';
+                const typeBadge = isMajor
+                    ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">Major</span>`
+                    : `<span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-teal-100 text-teal-700 border border-teal-200">Minor</span>`;
+
+                const leads = Array.isArray(task.leads) && task.leads.length > 0 
+                    ? task.leads 
+                    : (task.specialists && task.specialists.length > 0 ? [task.specialists[0]] : []);
+                
+                const supporting = (task.specialists || []).filter(s => !leads.includes(s));
+
+                const leadsHtml = leads.map(s => `
+                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300 mr-1 mb-1">
+                        <i class="fa-solid fa-crown text-amber-600 mr-1 text-[9px]"></i>${s}
+                    </span>
+                `).join('');
+
+                const supportingHtml = supporting.map(s => `
+                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-700 border border-slate-200 mr-1 mb-1">
+                        ${s}
+                    </span>
+                `).join('');
+
+                tr.innerHTML = `
+                    <td class="py-3 px-3 text-center text-slate-400 font-semibold">#${task.id}</td>
+                    <td class="py-3 px-4 font-bold text-slate-900">${task.name}</td>
+                    <td class="py-3 px-3 text-center">${typeBadge}</td>
+                    <td class="py-3 px-3 text-slate-600">${task.domainLabel || 'Klinikal'}</td>
+                    <td class="py-3 px-4">
+                        <div>${leadsHtml}</div>
+                        ${supporting.length > 0 ? `<div class="mt-0.5">${supportingHtml}</div>` : ''}
+                    </td>
+                    <td class="py-3 px-4 text-slate-600 font-medium">${task.mo || '-'}</td>
+                    <td class="py-3 px-3 text-center space-x-1 whitespace-nowrap">
+                        <button onclick="openEditTaskModal(${task.id})" title="Sunting Tugasan" class="p-1.5 text-indigo-600 hover:bg-indigo-50 border border-indigo-200 rounded-lg transition">
+                            <i class="fa-solid fa-pen text-xs"></i>
+                        </button>
+                        <button onclick="deleteTask(${task.id})" title="Padam Tugasan" class="p-1.5 text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-lg transition">
+                            <i class="fa-solid fa-trash-can text-xs"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function populateLeadDropdowns(selectedLead1 = '', selectedLead2 = '') {
+            const lead1Sel = document.getElementById('taskFormLead1');
+            const lead2Sel = document.getElementById('taskFormLead2');
+            if (!lead1Sel || !lead2Sel) return;
+
+            lead1Sel.innerHTML = `<option value="">-- Pilih Ketua Utama (Wajib) --</option>`;
+            lead2Sel.innerHTML = `<option value="">-- Tiada Ketua Bersama --</option>`;
+
+            specialistsList.forEach(sp => {
+                const opt1 = document.createElement('option');
+                opt1.value = sp;
+                opt1.textContent = sp;
+                lead1Sel.appendChild(opt1);
+
+                const opt2 = document.createElement('option');
+                opt2.value = sp;
+                opt2.textContent = sp;
+                lead2Sel.appendChild(opt2);
+            });
+
+            lead1Sel.value = selectedLead1 || '';
+            lead2Sel.value = selectedLead2 || '';
+        }
+
+        function handleLeadChange() {
+            const lead1 = document.getElementById('taskFormLead1')?.value || '';
+            const lead2 = document.getElementById('taskFormLead2')?.value || '';
+            
+            // Gather currently checked supporting specialists
+            const checkedSupporting = [];
+            document.querySelectorAll('#specialistCheckboxContainer input[type="checkbox"]:checked').forEach(cb => {
+                checkedSupporting.push(cb.value);
+            });
+
+            renderSpecialistCheckboxes(checkedSupporting, lead1, lead2);
+        }
+
+        function renderSpecialistCheckboxes(selectedSupporting = [], lead1 = '', lead2 = '') {
+            const container = document.getElementById('specialistCheckboxContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            // Available supporting are specialists not selected as Lead 1 or Lead 2
+            specialistsList.forEach(sp => {
+                if (sp === lead1 || (lead2 && sp === lead2)) return;
+
+                const isChecked = selectedSupporting.includes(sp);
+                const label = document.createElement('label');
+                label.className = "flex items-center space-x-2 text-xs p-1.5 rounded-lg hover:bg-slate-100 cursor-pointer text-slate-700";
+                label.innerHTML = `
+                    <input type="checkbox" value="${sp}" ${isChecked ? 'checked' : ''} class="rounded border-slate-300 text-teal-600 focus:ring-teal-500">
+                    <span class="truncate">${sp}</span>
+                `;
+                container.appendChild(label);
+            });
+        }
+
+        function openAddTaskModal() {
+            document.getElementById('taskModalTitle').textContent = "Tambah Tugasan Baharu";
+            document.getElementById('taskFormSubmitBtnText').textContent = "Simpan Tugasan";
+            document.getElementById('taskFormId').value = "";
+            document.getElementById('taskFormName').value = "";
+            document.getElementById('taskFormType').value = "Major";
+            document.getElementById('taskFormDomain').value = "clinical";
+            document.getElementById('taskFormMO').value = "";
+
+            populateLeadDropdowns('', '');
+            renderSpecialistCheckboxes([], '', '');
+            document.getElementById('taskModal').classList.remove('hidden');
+        }
+
+        function openEditTaskModal(taskId) {
+            const task = tasksData.find(t => t.id === taskId);
+            if (!task) return;
+
+            document.getElementById('taskModalTitle').textContent = `Sunting Tugasan #${task.id}`;
+            document.getElementById('taskFormSubmitBtnText').textContent = "Kemaskini Tugasan";
+            document.getElementById('taskFormId').value = task.id;
+            document.getElementById('taskFormName').value = task.name || '';
+            document.getElementById('taskFormType').value = task.type || 'Major';
+            document.getElementById('taskFormDomain').value = task.domain || 'clinical';
+            document.getElementById('taskFormMO').value = task.mo || '';
+
+            const leads = Array.isArray(task.leads) && task.leads.length > 0 
+                ? task.leads 
+                : (task.specialists && task.specialists.length > 0 ? [task.specialists[0]] : []);
+
+            const lead1 = leads[0] || '';
+            const lead2 = leads[1] || '';
+            const supporting = (task.specialists || []).filter(s => s !== lead1 && s !== lead2);
+
+            populateLeadDropdowns(lead1, lead2);
+            renderSpecialistCheckboxes(supporting, lead1, lead2);
+            document.getElementById('taskModal').classList.remove('hidden');
+        }
+
+        function closeTaskModal() {
+            document.getElementById('taskModal').classList.add('hidden');
+        }
+
+        async function handleTaskFormSubmit(e) {
+            e.preventDefault();
+            const idVal = document.getElementById('taskFormId').value;
+            const name = document.getElementById('taskFormName').value.trim();
+            const type = document.getElementById('taskFormType').value;
+            const domain = document.getElementById('taskFormDomain').value;
+            const mo = document.getElementById('taskFormMO').value.trim();
+            const lead1 = document.getElementById('taskFormLead1').value;
+            const lead2 = document.getElementById('taskFormLead2').value;
+
+            if (!lead1) {
+                showNotification("Perhatian", "Sila pilih sekurang-kurangnya seorang Ketua Utama (Lead 1).", false);
+                return;
+            }
+
+            const leads = [lead1];
+            if (lead2 && lead2 !== lead1) leads.push(lead2);
+
+            const supporting = [];
+            document.querySelectorAll('#specialistCheckboxContainer input[type="checkbox"]:checked').forEach(cb => {
+                if (!leads.includes(cb.value)) supporting.push(cb.value);
+            });
+
+            const allSpecialists = [...leads, ...supporting];
+
+            const domainLabels = {
+                quality: "Kualiti & Audit",
+                clinical: "Klinikal & Prosedur",
+                training: "Latihan & Akademik",
+                emergency: "Kecemasan & Kod",
+                governance: "Governan & Polisi",
+                admin: "Pentadbiran & Khidmat"
+            };
+
+            let targetTask;
+            if (idVal) {
+                const existingIdx = tasksData.findIndex(t => t.id == idVal);
+                if (existingIdx !== -1) {
+                    tasksData[existingIdx].name = name;
+                    tasksData[existingIdx].type = type;
+                    tasksData[existingIdx].domain = domain;
+                    tasksData[existingIdx].domainLabel = domainLabels[domain] || "Klinikal";
+                    tasksData[existingIdx].leads = leads;
+                    tasksData[existingIdx].specialists = allSpecialists;
+                    tasksData[existingIdx].mo = mo || "-";
+                    targetTask = tasksData[existingIdx];
+                }
+            } else {
+                const nextId = tasksData.length > 0 ? Math.max(...tasksData.map(t => t.id)) + 1 : 1;
+                targetTask = {
+                    id: nextId,
+                    name,
+                    type,
+                    domain,
+                    domainLabel: domainLabels[domain] || "Klinikal",
+                    leads,
+                    specialists: allSpecialists,
+                    mo: mo || "-"
+                };
+                tasksData.push(targetTask);
+            }
+
+            localStorage.setItem('htpn_og_tasks_v2', JSON.stringify(tasksData));
+            if (window.cloudSaveTask && targetTask) {
+                window.cloudSaveTask(targetTask);
+            }
+
+            refreshSpecialistsList();
+            populateSpecialistFilter();
+            filterTasksTable();
+            renderSpecialistGrid();
+            initializeCharts();
+            updateTopMetrics();
+            renderQuickLookupCards(document.getElementById('quickLookupInput')?.value || '');
+            closeTaskModal();
+            showNotification("Tugasan Disimpan", `Tugasan "${name}" berjaya dikemaskini.`);
+        }
+
+        async function deleteTask(taskId) {
+            const task = tasksData.find(t => t.id === taskId);
+            if (!task) return;
+
+            tasksData = tasksData.filter(t => t.id !== taskId);
+            localStorage.setItem('htpn_og_tasks_v2', JSON.stringify(tasksData));
+            if (window.cloudDeleteTask) {
+                window.cloudDeleteTask(taskId);
+            }
+
+            refreshSpecialistsList();
+            populateSpecialistFilter();
+            filterTasksTable();
+            renderSpecialistGrid();
+            initializeCharts();
+            updateTopMetrics();
+            renderQuickLookupCards(document.getElementById('quickLookupInput')?.value || '');
+            showNotification("Tugasan Dipadam", `Tugasan #${taskId} telah dikeluarkan.`);
+        }
+
+        // Window Onload Initialization
         window.onload = function () {
             refreshSpecialistsList();
             populateSpecialistFilter();
             renderTasksTable();
             renderSpecialistGrid();
-            initializeCharts();
             updateTopMetrics();
+            renderQuickLookupCards();
+
+            // Open the Quick In-Charge lookup tab directly
+            switchTab('lookup');
 
             window.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     closeSpecialistModal();
                     closeUploadModal();
                     closeTaskModal();
-                    closeDeleteConfirmModal();
                     closeRosterModal();
-                    closeDeleteSpecialistModal();
-                    closeDeleteMoModal();
                 }
             });
         };
